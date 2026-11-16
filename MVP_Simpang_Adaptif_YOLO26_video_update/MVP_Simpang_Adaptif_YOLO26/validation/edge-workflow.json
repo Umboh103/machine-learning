@@ -1,0 +1,69 @@
+{
+  "version": "0.3.1",
+  "scope": "Recorded file -> real YOLO26 NMS-free/ByteTrack -> weighted presence proposal -> local foreground simulator; not SRS visual acceptance or physical signal deployment",
+  "tests_run": {
+    "javascript": {
+      "passed": 68,
+      "failed": 0
+    },
+    "python": {
+      "passed": 33,
+      "failed": 0,
+      "skipped": 0,
+      "real_inference_enabled": true
+    },
+    "edge_browser_groups": 5,
+    "main_dashboard_regression_groups": 9
+  },
+  "real_edge_inference": {
+    "frames": 65,
+    "session_id": "4642d999-eaec-4a4b-ba1b-c288de911e10",
+    "weights_sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+    "transport": "local-http-simulator",
+    "source": "Public bus-photo loop; accelerated demo phase timing"
+  },
+  "verified": [
+    "Immutable session configuration",
+    "Replay and repeated source-frame rejection",
+    "Three distinct observations at one-second recovery cadence",
+    "Frozen decision and full yellow/all-red",
+    "Fallback on expired/invalid source or changed epoch",
+    "Single consumer lease; background timeout and restart fail sessions",
+    "Pause/resume/end and synthetic vehicle response",
+    "Durable proposal, decision, transition, application ACK, JSON/CSV",
+    "Legacy Mamdani core and renderer checksums unchanged"
+  ],
+  "pending": [
+    "Representative annotated CCTV",
+    "Camera quality classification and emergency classifier",
+    "Real RTSP/USB, Jetson and MQTT receiver testing",
+    "Physical signal controller",
+    "SRS performance acceptance and 15 paired visual evaluations"
+  ],
+  "documentation_links_checked": 40,
+  "implementation_files": [
+    ".gitignore",
+    "backend/app.py",
+    "backend/edge_protocol.py",
+    "backend/edge_bridge.py",
+    "dist/index.html",
+    "dist/edge.html",
+    "dist/edge.css",
+    "dist/edge-controller.js",
+    "dist/edge-dashboard.js",
+    "examples/edge_density/edge_agent.py",
+    "tests/test_edge_bridge.py",
+    "tests/edge.test.mjs",
+    "scripts/check-edge-browser.mjs",
+    "README.md",
+    "MVP_STATUS.md",
+    "examples/edge_density/README.md",
+    "docs/EDGE_AI_TRAFFIC_DESIGN.md"
+  ],
+  "evidence": [
+    "edge-browser-check.json",
+    "edge-integrated-inference.json",
+    "edge-simulator-browser.png",
+    "browser-regression-edge-update.json"
+  ]
+}

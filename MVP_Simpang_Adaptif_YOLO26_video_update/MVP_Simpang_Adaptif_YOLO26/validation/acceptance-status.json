@@ -1,0 +1,107 @@
+{
+  "date": "2026-11-16",
+  "overall_acceptance": "pending",
+  "functional_tests": {
+    "javascript": {
+      "pass": 60,
+      "total": 60
+    },
+    "backend_pytorch": {
+      "pass": 17,
+      "total": 17
+    },
+    "backend_onnx_same_suite": {
+      "pass": 17,
+      "total": 17
+    },
+    "browser_groups": {
+      "pass": 9,
+      "total": 9
+    }
+  },
+  "reliability": {
+    "pass": true,
+    "simulation_seconds": 1800,
+    "visual_endurance_tested": false,
+    "journal": {
+      "snapshots": 1800,
+      "decisions": 32,
+      "transitions": 128,
+      "json_readable": true,
+      "csv_readable": true,
+      "config_sha256": "f3cb91c62f38f8c003568e52d526268fe0eb6c7b270b4d77d0f4e4ab5c18e628"
+    }
+  },
+  "baseline": {
+    "development_sessions": 75,
+    "duration_seconds_each": 1800,
+    "warmup_seconds": 300,
+    "fixed_green_seconds": 20,
+    "locked": true
+  },
+  "telemetry_reference": {
+    "pairs": 15,
+    "acceptance_pass": false,
+    "summary": {
+      "pairs": 15,
+      "status": "computed; acceptance requires detector and performance gates",
+      "aggregation": "meanWait weighted by entered vehicles; meanQueue and throughput weighted by measurement duration; paired difference and bootstrap are unweighted pair differences",
+      "confidence_interval_method": "paired nonparametric bootstrap; pairs resampled; 5000 replicates by default",
+      "metrics": {
+        "meanWait": {
+          "adaptive_mean": 99.54825825277987,
+          "fixed_mean": 86.58973189859697,
+          "paired_difference": 21.991294694818784,
+          "paired_bootstrap_95_ci": [
+            10.382002525793844,
+            31.861446479911347
+          ],
+          "relative_improvement_pct": -14.965430738783565
+        },
+        "meanQueue": {
+          "adaptive_mean": 75.34933777774651,
+          "fixed_mean": 64.52495555552403,
+          "paired_difference": 10.824382222222477,
+          "paired_bootstrap_95_ci": [
+            2.986151111117139,
+            18.226933333328862
+          ],
+          "relative_improvement_pct": -16.77549737001841
+        },
+        "throughput": {
+          "adaptive_mean": 2513.76,
+          "fixed_mean": 2458.88,
+          "paired_difference": 54.88000000000008,
+          "paired_bootstrap_95_ci": [
+            18.400000000000105,
+            92.48000000000012
+          ],
+          "relative_improvement_pct": -2.231910463300369
+        }
+      }
+    }
+  },
+  "remaining_acceptance": [
+    "locked representative traffic annotations: >=300 ROI/timestamp pairs and >=60 paths, two reviewers and disjoint calibration/test",
+    "renderer vehicles are not detected by YOLO26 in actual smoke",
+    "NFR04 >=10 effective FPS on representative 1280x720 video not achieved",
+    "15 full visual pairs and KPI acceptance not completed",
+    "current configuration UI/core supports four ROI movements"
+  ],
+  "traceability": "MVP_STATUS.md",
+  "model_preparation": {
+    "verified": true,
+    "before_media_playback": true,
+    "not_a_source_observation": true,
+    "cold_start_ms": 11282.902300008573,
+    "first_source_media_time_s": 0.067,
+    "failure_ends_session": true
+  },
+  "recorded_cctv_to_simulator": {
+    "functional_pass": true,
+    "evidence": "recorded-workflow.json",
+    "camera_profiles_durable": true,
+    "bounded_checksum_worker": true,
+    "synthetic_queue_as_controller_input": false
+  }
+}

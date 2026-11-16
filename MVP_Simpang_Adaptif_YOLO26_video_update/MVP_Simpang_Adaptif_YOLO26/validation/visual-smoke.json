@@ -1,0 +1,1316 @@
+{
+  "schema": "simpang-visual-evaluation-v1",
+  "created_at": "2026-11-12T10:16:35.854Z",
+  "scope": "pipeline smoke; not acceptance",
+  "acceptance_status": "pending annotated detector validation and simulator validation",
+  "implementation": {
+    "core_sha256": "729d6f41f26d164504d049b0d353e0348bd5ad9936de2fdf5622573d53d5f012",
+    "renderer_sha256": "f5fffc7d03bd0f8bb89fd87b5326fda8265d9f79e6b415ffaccbcc7ac7db5110",
+    "evaluator_sha256": "c2f0c9c332f18c409b0e7c3931ddcaeec98480ab89d9cb3145f80f36307d281b"
+  },
+  "environment": {
+    "node": "v22.18.0",
+    "platform": "win32",
+    "architecture": "x64",
+    "cpu": "AMD Ryzen 5 5600H with Radeon Graphics         ",
+    "logical_cpus": 12
+  },
+  "horizon_s": 3,
+  "warmup_s": 0,
+  "frames_per_media_second": 10,
+  "baseline_lock": null,
+  "truth_as_controller_input": false,
+  "renderer": "procedural-raster-v1",
+  "results": [
+    {
+      "scenario": {
+        "scenario_id": "sedang-seed-101",
+        "level": "sedang",
+        "seed": 101,
+        "arrival_schedule_sha256": "e380382aaf799f150583534c54b98ad3ba9958d9d993efabd0e7851aa2bd27e7",
+        "arrivals": 5,
+        "config": {
+          "version": "0.2.0",
+          "gmin": 10,
+          "gmax": 60,
+          "fixed": 30,
+          "yellow": 3,
+          "allred": 1,
+          "seed": 101,
+          "level": "sedang",
+          "warmup": 0,
+          "horizon": 3,
+          "phases": [
+            {
+              "id": 0,
+              "name": "Utara",
+              "rois": [
+                0
+              ]
+            },
+            {
+              "id": 1,
+              "name": "Timur",
+              "rois": [
+                1
+              ]
+            },
+            {
+              "id": 2,
+              "name": "Selatan",
+              "rois": [
+                2
+              ]
+            },
+            {
+              "id": 3,
+              "name": "Barat",
+              "rois": [
+                3
+              ]
+            }
+          ],
+          "phaseOrder": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "conflictMap": [
+            [
+              false,
+              true,
+              true,
+              true
+            ],
+            [
+              true,
+              false,
+              true,
+              true
+            ],
+            [
+              true,
+              true,
+              false,
+              true
+            ],
+            [
+              true,
+              true,
+              true,
+              false
+            ]
+          ],
+          "exitDirections": [
+            "outward",
+            "outward",
+            "outward",
+            "outward"
+          ],
+          "observation": {
+            "window": 1,
+            "enterSpeed": 0.01,
+            "exitSpeed": 0.02,
+            "enterSeconds": 1,
+            "exitSeconds": 0.5,
+            "missingSeconds": 1
+          },
+          "snapshotMaxAge": 2,
+          "recoverySnapshots": 3,
+          "fuzzy": {
+            "queue": [
+              [
+                0,
+                0,
+                3,
+                8
+              ],
+              [
+                5,
+                15,
+                25
+              ],
+              [
+                18,
+                25,
+                30,
+                30
+              ]
+            ],
+            "wait": [
+              [
+                0,
+                0,
+                10,
+                30
+              ],
+              [
+                20,
+                60,
+                100
+              ],
+              [
+                80,
+                100,
+                120,
+                120
+              ]
+            ],
+            "green": [
+              [
+                10,
+                10,
+                15,
+                25
+              ],
+              [
+                20,
+                35,
+                50
+              ],
+              [
+                45,
+                55,
+                60,
+                60
+              ]
+            ],
+            "rules": [
+              [
+                0,
+                1,
+                2
+              ],
+              [
+                1,
+                1,
+                2
+              ],
+              [
+                2,
+                2,
+                2
+              ]
+            ],
+            "step": 0.1
+          },
+          "vehicleClasses": [
+            2,
+            3,
+            5,
+            7
+          ],
+          "confidence": 0.25,
+          "imgsz": 1280,
+          "roiLabels": [
+            "Utara",
+            "Timur",
+            "Selatan",
+            "Barat"
+          ],
+          "rois": [
+            [
+              [
+                0.34,
+                0.02
+              ],
+              [
+                0.49,
+                0.02
+              ],
+              [
+                0.49,
+                0.36
+              ],
+              [
+                0.34,
+                0.36
+              ]
+            ],
+            [
+              [
+                0.64,
+                0.34
+              ],
+              [
+                0.98,
+                0.34
+              ],
+              [
+                0.98,
+                0.49
+              ],
+              [
+                0.64,
+                0.49
+              ]
+            ],
+            [
+              [
+                0.51,
+                0.64
+              ],
+              [
+                0.66,
+                0.64
+              ],
+              [
+                0.66,
+                0.98
+              ],
+              [
+                0.51,
+                0.98
+              ]
+            ],
+            [
+              [
+                0.02,
+                0.51
+              ],
+              [
+                0.36,
+                0.51
+              ],
+              [
+                0.36,
+                0.66
+              ],
+              [
+                0.02,
+                0.66
+              ]
+            ]
+          ],
+          "exitLines": [
+            [
+              [
+                0.34,
+                0.36
+              ],
+              [
+                0.49,
+                0.36
+              ]
+            ],
+            [
+              [
+                0.64,
+                0.34
+              ],
+              [
+                0.64,
+                0.49
+              ]
+            ],
+            [
+              [
+                0.66,
+                0.64
+              ],
+              [
+                0.51,
+                0.64
+              ]
+            ],
+            [
+              [
+                0.36,
+                0.66
+              ],
+              [
+                0.36,
+                0.51
+              ]
+            ]
+          ]
+        },
+        "pair_equivalence": {
+          "same_geometry": true,
+          "same_routes": true,
+          "same_vehicle_types": true,
+          "same_initial_queue": true,
+          "same_arrivals": true,
+          "same_seed": true,
+          "same_phase_transitions": true,
+          "horizon_s": 3,
+          "warmup_s": 0
+        }
+      },
+      "adaptive": {
+        "meanWait": 0,
+        "waitSum": 0,
+        "meanQueue": 0,
+        "queueArea": 0,
+        "queueAreaByDirection": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "measurementSeconds": 3,
+        "throughputCount": 0,
+        "throughput": 0,
+        "remaining": 5,
+        "entered": 5,
+        "perDirection": [
+          {
+            "name": "Utara",
+            "entered": 1,
+            "remaining": 1,
+            "waitSum": 0,
+            "waitSamples": [
+              0
+            ],
+            "meanWait": 0,
+            "p95": 0,
+            "meanQueue": 0
+          },
+          {
+            "name": "Timur",
+            "entered": 1,
+            "remaining": 1,
+            "waitSum": 0,
+            "waitSamples": [
+              0
+            ],
+            "meanWait": 0,
+            "p95": 0,
+            "meanQueue": 0
+          },
+          {
+            "name": "Selatan",
+            "entered": 2,
+            "remaining": 2,
+            "waitSum": 0,
+            "waitSamples": [
+              0,
+              0
+            ],
+            "meanWait": 0,
+            "p95": 0,
+            "meanQueue": 0
+          },
+          {
+            "name": "Barat",
+            "entered": 1,
+            "remaining": 1,
+            "waitSum": 0,
+            "waitSamples": [
+              0
+            ],
+            "meanWait": 0,
+            "p95": 0,
+            "meanQueue": 0
+          }
+        ],
+        "control": {
+          "maxRedSeconds": 0,
+          "boundSeconds": 196,
+          "redBoundViolations": [],
+          "phaseOrder": [
+            0,
+            1,
+            2,
+            3
+          ]
+        }
+      },
+      "fixed": {
+        "meanWait": 0,
+        "waitSum": 0,
+        "meanQueue": 0,
+        "queueArea": 0,
+        "queueAreaByDirection": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "measurementSeconds": 3,
+        "throughputCount": 0,
+        "throughput": 0,
+        "remaining": 5,
+        "entered": 5,
+        "perDirection": [
+          {
+            "name": "Utara",
+            "entered": 1,
+            "remaining": 1,
+            "waitSum": 0,
+            "waitSamples": [
+              0
+            ],
+            "meanWait": 0,
+            "p95": 0,
+            "meanQueue": 0
+          },
+          {
+            "name": "Timur",
+            "entered": 1,
+            "remaining": 1,
+            "waitSum": 0,
+            "waitSamples": [
+              0
+            ],
+            "meanWait": 0,
+            "p95": 0,
+            "meanQueue": 0
+          },
+          {
+            "name": "Selatan",
+            "entered": 2,
+            "remaining": 2,
+            "waitSum": 0,
+            "waitSamples": [
+              0,
+              0
+            ],
+            "meanWait": 0,
+            "p95": 0,
+            "meanQueue": 0
+          },
+          {
+            "name": "Barat",
+            "entered": 1,
+            "remaining": 1,
+            "waitSum": 0,
+            "waitSamples": [
+              0
+            ],
+            "meanWait": 0,
+            "p95": 0,
+            "meanQueue": 0
+          }
+        ],
+        "control": {
+          "maxRedSeconds": 0,
+          "boundSeconds": 196,
+          "redBoundViolations": [],
+          "phaseOrder": [
+            0,
+            1,
+            2,
+            3
+          ]
+        }
+      },
+      "sessions": {
+        "adaptive": {
+          "session_id": "d6ed569e-af82-4c05-9b7b-11ac4e1cad44",
+          "mode": "adaptive",
+          "metrics": {
+            "meanWait": 0,
+            "waitSum": 0,
+            "meanQueue": 0,
+            "queueArea": 0,
+            "queueAreaByDirection": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "measurementSeconds": 3,
+            "throughputCount": 0,
+            "throughput": 0,
+            "remaining": 5,
+            "entered": 5,
+            "perDirection": [
+              {
+                "name": "Utara",
+                "entered": 1,
+                "remaining": 1,
+                "waitSum": 0,
+                "waitSamples": [
+                  0
+                ],
+                "meanWait": 0,
+                "p95": 0,
+                "meanQueue": 0
+              },
+              {
+                "name": "Timur",
+                "entered": 1,
+                "remaining": 1,
+                "waitSum": 0,
+                "waitSamples": [
+                  0
+                ],
+                "meanWait": 0,
+                "p95": 0,
+                "meanQueue": 0
+              },
+              {
+                "name": "Selatan",
+                "entered": 2,
+                "remaining": 2,
+                "waitSum": 0,
+                "waitSamples": [
+                  0,
+                  0
+                ],
+                "meanWait": 0,
+                "p95": 0,
+                "meanQueue": 0
+              },
+              {
+                "name": "Barat",
+                "entered": 1,
+                "remaining": 1,
+                "waitSum": 0,
+                "waitSamples": [
+                  0
+                ],
+                "meanWait": 0,
+                "p95": 0,
+                "meanQueue": 0
+              }
+            ],
+            "control": {
+              "maxRedSeconds": 0,
+              "boundSeconds": 196,
+              "redBoundViolations": [],
+              "phaseOrder": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          },
+          "decisions": [],
+          "transitions": [
+            {
+              "time": 0,
+              "type": "gangguan",
+              "mode": "cadangan",
+              "reason": "sumber atau snapshot tidak valid/kedaluwarsa",
+              "fault_at": 0
+            }
+          ],
+          "control_audit": {
+            "nfr05_pass": true,
+            "no_skipped_phase": true,
+            "red_bound_pass": true,
+            "max_same_phase_red_s": 0,
+            "red_bound_s_by_phase": [
+              196,
+              196,
+              196,
+              196
+            ],
+            "complete_decision_log": true,
+            "complete_transition_records": 0,
+            "full_30_minute_horizon": false,
+            "red_intervals": [],
+            "failures": []
+          },
+          "served_visual": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "ground_truth": {
+            "usage": "evaluation only; never perception/controller input",
+            "initial_queue": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "final_queue": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "departures": 0,
+            "unfinished": [
+              {
+                "id": 1,
+                "direction": 0,
+                "arrival_s": 0,
+                "departure_s": null,
+                "wait_s": 0,
+                "final_position": 0.8100000000000013,
+                "unfinished": true
+              },
+              {
+                "id": 2,
+                "direction": 1,
+                "arrival_s": 0,
+                "departure_s": null,
+                "wait_s": 0,
+                "final_position": 0.8100000000000013,
+                "unfinished": true
+              },
+              {
+                "id": 3,
+                "direction": 2,
+                "arrival_s": 0,
+                "departure_s": null,
+                "wait_s": 0,
+                "final_position": 0.8100000000000013,
+                "unfinished": true
+              },
+              {
+                "id": 4,
+                "direction": 3,
+                "arrival_s": 0,
+                "departure_s": null,
+                "wait_s": 0,
+                "final_position": 0.8100000000000013,
+                "unfinished": true
+              },
+              {
+                "id": 5,
+                "direction": 2,
+                "arrival_s": 0.1275089295533876,
+                "departure_s": null,
+                "wait_s": 0,
+                "final_position": 0.8950000000000019,
+                "unfinished": true
+              }
+            ],
+            "vehicles": [
+              {
+                "id": 1,
+                "direction": 0,
+                "arrival_s": 0,
+                "departure_s": null,
+                "wait_s": 0,
+                "final_position": 0.8100000000000013,
+                "unfinished": true
+              },
+              {
+                "id": 2,
+                "direction": 1,
+                "arrival_s": 0,
+                "departure_s": null,
+                "wait_s": 0,
+                "final_position": 0.8100000000000013,
+                "unfinished": true
+              },
+              {
+                "id": 3,
+                "direction": 2,
+                "arrival_s": 0,
+                "departure_s": null,
+                "wait_s": 0,
+                "final_position": 0.8100000000000013,
+                "unfinished": true
+              },
+              {
+                "id": 4,
+                "direction": 3,
+                "arrival_s": 0,
+                "departure_s": null,
+                "wait_s": 0,
+                "final_position": 0.8100000000000013,
+                "unfinished": true
+              },
+              {
+                "id": 5,
+                "direction": 2,
+                "arrival_s": 0.1275089295533876,
+                "departure_s": null,
+                "wait_s": 0,
+                "final_position": 0.8950000000000019,
+                "unfinished": true
+              }
+            ],
+            "queue_history": [
+              {
+                "time": 0.1,
+                "q": 0,
+                "w": 0
+              },
+              {
+                "time": 1.1,
+                "q": 0,
+                "w": 0
+              },
+              {
+                "time": 2.1,
+                "q": 0,
+                "w": 0
+              }
+            ]
+          },
+          "performance": {
+            "processed_frames": 11,
+            "published_snapshots": 4,
+            "elapsed_wall_s": 3.1868215,
+            "effective_fps": 3.451715133715522,
+            "frame_to_snapshot_p95_ms": 1084.7676999999999,
+            "first_frame_to_snapshot_ms": 510.1459,
+            "after_first_frame": {
+              "processed_frames": 10,
+              "elapsed_wall_s": 2.7353946000000002,
+              "effective_fps": 3.6557796816590917,
+              "frame_to_snapshot_p95_ms": 1084.7676999999999,
+              "scope": "first request excluded; short smoke is not sustained acceptance"
+            },
+            "frame_to_observation_p95_ms": 451.42690000000005,
+            "frame_to_snapshot_samples_ms": [
+              510.1459,
+              1084.7676999999999,
+              732.5255999999999,
+              305.0953999999999,
+              1009.3498999999999,
+              756.8140999999998,
+              523.1943000000001,
+              288.0920000000001,
+              708.4818,
+              478.80650000000014,
+              238.88419999999996
+            ],
+            "latency_scope": "each captured frame to first subsequent snapshot publication, including 1s scheduling and final partial-second flush; all processed frames included",
+            "target_fps": 10,
+            "target_p95_ms": 1000,
+            "performance_pass": false
+          },
+          "perception_diagnostics": {
+            "detection_frames": 0,
+            "empty_frames": 11,
+            "truth_vehicle_frames": 50,
+            "detected_vehicle_frames": 0,
+            "scope": "counts diagnostic only; not detection precision/recall or tracking accuracy"
+          },
+          "model_metadata": {
+            "ultralytics": "8.4.210",
+            "weights": "yolo26n.pt",
+            "weights_sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+            "tracker": "bytetrack.yaml",
+            "tracker_config": {
+              "tracker_type": "bytetrack",
+              "track_high_thresh": 0.25,
+              "track_low_thresh": 0.1,
+              "new_track_thresh": 0.25,
+              "track_buffer": 30,
+              "match_thresh": 0.8,
+              "fuse_score": true,
+              "device": "cpu"
+            },
+            "class_ids": [
+              2,
+              3,
+              5,
+              7
+            ],
+            "confidence": 0.25,
+            "imgsz": 1280,
+            "device": "cpu",
+            "inference_ms": 163.04719998151995,
+            "frame_width": 1280,
+            "frame_height": 720,
+            "decoded_width": 1280,
+            "decoded_height": 720,
+            "original_width": 1280,
+            "original_height": 720,
+            "coordinates": "normalized-to-decoded-frame",
+            "processing_ms": 185.00029999995604,
+            "lock_wait_ms": 21.85960000497289
+          },
+          "journal_verification": {
+            "readable": true,
+            "status": "ended",
+            "event_counts": {
+              "lifecycle": 2,
+              "observation": 11,
+              "fault": 1,
+              "measurement": 11,
+              "snapshot": 4,
+              "evaluation_complete": 1
+            },
+            "decisions_complete": true,
+            "snapshots_complete": true,
+            "measurements_complete": true
+          },
+          "nfr07": {
+            "full_30_minutes": false,
+            "process_completed": true,
+            "decision_transition_logs_readable": true
+          }
+        },
+        "fixed": {
+          "session_id": "5f2c58e3-931c-446e-b61d-38998cf3fae4",
+          "mode": "fixed",
+          "metrics": {
+            "meanWait": 0,
+            "waitSum": 0,
+            "meanQueue": 0,
+            "queueArea": 0,
+            "queueAreaByDirection": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "measurementSeconds": 3,
+            "throughputCount": 0,
+            "throughput": 0,
+            "remaining": 5,
+            "entered": 5,
+            "perDirection": [
+              {
+                "name": "Utara",
+                "entered": 1,
+                "remaining": 1,
+                "waitSum": 0,
+                "waitSamples": [
+                  0
+                ],
+                "meanWait": 0,
+                "p95": 0,
+                "meanQueue": 0
+              },
+              {
+                "name": "Timur",
+                "entered": 1,
+                "remaining": 1,
+                "waitSum": 0,
+                "waitSamples": [
+                  0
+                ],
+                "meanWait": 0,
+                "p95": 0,
+                "meanQueue": 0
+              },
+              {
+                "name": "Selatan",
+                "entered": 2,
+                "remaining": 2,
+                "waitSum": 0,
+                "waitSamples": [
+                  0,
+                  0
+                ],
+                "meanWait": 0,
+                "p95": 0,
+                "meanQueue": 0
+              },
+              {
+                "name": "Barat",
+                "entered": 1,
+                "remaining": 1,
+                "waitSum": 0,
+                "waitSamples": [
+                  0
+                ],
+                "meanWait": 0,
+                "p95": 0,
+                "meanQueue": 0
+              }
+            ],
+            "control": {
+              "maxRedSeconds": 0,
+              "boundSeconds": 196,
+              "redBoundViolations": [],
+              "phaseOrder": [
+                0,
+                1,
+                2,
+                3
+              ]
+            }
+          },
+          "decisions": [],
+          "transitions": [],
+          "control_audit": {
+            "nfr05_pass": true,
+            "no_skipped_phase": true,
+            "red_bound_pass": true,
+            "max_same_phase_red_s": 0,
+            "red_bound_s_by_phase": [
+              196,
+              196,
+              196,
+              196
+            ],
+            "complete_decision_log": true,
+            "complete_transition_records": 0,
+            "full_30_minute_horizon": false,
+            "red_intervals": [],
+            "failures": []
+          },
+          "served_visual": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "ground_truth": {
+            "usage": "evaluation only; never perception/controller input",
+            "initial_queue": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "final_queue": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "departures": 0,
+            "unfinished": [
+              {
+                "id": 1,
+                "direction": 0,
+                "arrival_s": 0,
+                "departure_s": null,
+                "wait_s": 0,
+                "final_position": 0.8100000000000013,
+                "unfinished": true
+              },
+              {
+                "id": 2,
+                "direction": 1,
+                "arrival_s": 0,
+                "departure_s": null,
+                "wait_s": 0,
+                "final_position": 0.8100000000000013,
+                "unfinished": true
+              },
+              {
+                "id": 3,
+                "direction": 2,
+                "arrival_s": 0,
+                "departure_s": null,
+                "wait_s": 0,
+                "final_position": 0.8100000000000013,
+                "unfinished": true
+              },
+              {
+                "id": 4,
+                "direction": 3,
+                "arrival_s": 0,
+                "departure_s": null,
+                "wait_s": 0,
+                "final_position": 0.8100000000000013,
+                "unfinished": true
+              },
+              {
+                "id": 5,
+                "direction": 2,
+                "arrival_s": 0.1275089295533876,
+                "departure_s": null,
+                "wait_s": 0,
+                "final_position": 0.8950000000000019,
+                "unfinished": true
+              }
+            ],
+            "vehicles": [
+              {
+                "id": 1,
+                "direction": 0,
+                "arrival_s": 0,
+                "departure_s": null,
+                "wait_s": 0,
+                "final_position": 0.8100000000000013,
+                "unfinished": true
+              },
+              {
+                "id": 2,
+                "direction": 1,
+                "arrival_s": 0,
+                "departure_s": null,
+                "wait_s": 0,
+                "final_position": 0.8100000000000013,
+                "unfinished": true
+              },
+              {
+                "id": 3,
+                "direction": 2,
+                "arrival_s": 0,
+                "departure_s": null,
+                "wait_s": 0,
+                "final_position": 0.8100000000000013,
+                "unfinished": true
+              },
+              {
+                "id": 4,
+                "direction": 3,
+                "arrival_s": 0,
+                "departure_s": null,
+                "wait_s": 0,
+                "final_position": 0.8100000000000013,
+                "unfinished": true
+              },
+              {
+                "id": 5,
+                "direction": 2,
+                "arrival_s": 0.1275089295533876,
+                "departure_s": null,
+                "wait_s": 0,
+                "final_position": 0.8950000000000019,
+                "unfinished": true
+              }
+            ],
+            "queue_history": [
+              {
+                "time": 0.1,
+                "q": 0,
+                "w": 0
+              },
+              {
+                "time": 1.1,
+                "q": 0,
+                "w": 0
+              },
+              {
+                "time": 2.1,
+                "q": 0,
+                "w": 0
+              }
+            ]
+          },
+          "performance": {
+            "processed_frames": 13,
+            "published_snapshots": 4,
+            "elapsed_wall_s": 3.2587855999999995,
+            "effective_fps": 3.989216105533301,
+            "frame_to_snapshot_p95_ms": 1098.0398999999998,
+            "first_frame_to_snapshot_ms": 413.2430999999997,
+            "after_first_frame": {
+              "processed_frames": 12,
+              "elapsed_wall_s": 2.9419656999999995,
+              "effective_fps": 4.078905474662741,
+              "frame_to_snapshot_p95_ms": 1098.0398999999998,
+              "scope": "first request excluded; short smoke is not sustained acceptance"
+            },
+            "frame_to_observation_p95_ms": 325.4336999999996,
+            "frame_to_snapshot_samples_ms": [
+              413.2430999999997,
+              1098.0398999999998,
+              854.1720999999998,
+              528.7245000000003,
+              295.6975000000002,
+              1053.1580000000004,
+              823.0771000000004,
+              598.7007000000003,
+              358.58370000000014,
+              952.9718999999996,
+              728.8408,
+              481.9841999999999,
+              233.84259999999995
+            ],
+            "latency_scope": "each captured frame to first subsequent snapshot publication, including 1s scheduling and final partial-second flush; all processed frames included",
+            "target_fps": 10,
+            "target_p95_ms": 1000,
+            "performance_pass": false
+          },
+          "perception_diagnostics": {
+            "detection_frames": 0,
+            "empty_frames": 13,
+            "truth_vehicle_frames": 60,
+            "detected_vehicle_frames": 0,
+            "scope": "counts diagnostic only; not detection precision/recall or tracking accuracy"
+          },
+          "model_metadata": {
+            "ultralytics": "8.4.210",
+            "weights": "yolo26n.pt",
+            "weights_sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+            "tracker": "bytetrack.yaml",
+            "tracker_config": {
+              "tracker_type": "bytetrack",
+              "track_high_thresh": 0.25,
+              "track_low_thresh": 0.1,
+              "new_track_thresh": 0.25,
+              "track_buffer": 30,
+              "match_thresh": 0.8,
+              "fuse_score": true,
+              "device": "cpu"
+            },
+            "class_ids": [
+              2,
+              3,
+              5,
+              7
+            ],
+            "confidence": 0.25,
+            "imgsz": 1280,
+            "device": "cpu",
+            "inference_ms": 158.53520002565347,
+            "frame_width": 1280,
+            "frame_height": 720,
+            "decoded_width": 1280,
+            "decoded_height": 720,
+            "original_width": 1280,
+            "original_height": 720,
+            "coordinates": "normalized-to-decoded-frame",
+            "processing_ms": 189.58700000075623,
+            "lock_wait_ms": 30.948899977374822
+          },
+          "journal_verification": {
+            "readable": true,
+            "status": "ended",
+            "event_counts": {
+              "lifecycle": 2,
+              "observation": 13,
+              "measurement": 13,
+              "snapshot": 4,
+              "evaluation_complete": 1
+            },
+            "decisions_complete": true,
+            "snapshots_complete": true,
+            "measurements_complete": true
+          },
+          "nfr07": {
+            "full_30_minutes": false,
+            "process_completed": true,
+            "decision_transition_logs_readable": true
+          }
+        }
+      }
+    }
+  ],
+  "summary": {
+    "pairs": 1,
+    "status": "partial",
+    "aggregation": "meanWait weighted by entered vehicles; meanQueue and throughput weighted by measurement duration; paired difference and bootstrap are unweighted pair differences",
+    "confidence_interval_method": "paired nonparametric bootstrap; pairs resampled; 5000 replicates by default",
+    "metrics": {
+      "meanWait": {
+        "adaptive_mean": 0,
+        "fixed_mean": 0,
+        "paired_difference": 0,
+        "paired_bootstrap_95_ci": [
+          0,
+          0
+        ],
+        "relative_improvement_pct": null
+      },
+      "meanQueue": {
+        "adaptive_mean": 0,
+        "fixed_mean": 0,
+        "paired_difference": 0,
+        "paired_bootstrap_95_ci": [
+          0,
+          0
+        ],
+        "relative_improvement_pct": null
+      },
+      "throughput": {
+        "adaptive_mean": 0,
+        "fixed_mean": 0,
+        "paired_difference": 0,
+        "paired_bootstrap_95_ci": [
+          0,
+          0
+        ],
+        "relative_improvement_pct": null
+      }
+    }
+  },
+  "impact_targets": {
+    "status": "partial; cannot accept AT10",
+    "pairs": 1,
+    "KPI01": {
+      "adaptive_mean_wait_s": 0,
+      "fixed_mean_wait_s": 0,
+      "reduction_pct": null,
+      "absolute_difference_s": 0,
+      "target_reduction_pct": 10,
+      "numerical_target_met": null
+    },
+    "KPI02": {
+      "adaptive_time_weighted_queue": 0,
+      "fixed_time_weighted_queue": 0,
+      "queue_reduction_pct": null,
+      "queue_absolute_difference": 0,
+      "throughput_ratio": null,
+      "throughput_absolute_difference": 0,
+      "numerical_target_met": null
+    },
+    "KPI03": {
+      "per_direction": [
+        {
+          "direction": 0,
+          "adaptive_p95_s": 0,
+          "fixed_p95_s": 0,
+          "combined_target_met": true,
+          "worst_pair_ratio": 0,
+          "pairs": [
+            {
+              "pair": 0,
+              "adaptive_p95_s": 0,
+              "fixed_p95_s": 0,
+              "ratio": null,
+              "absolute_difference_s": 0,
+              "target_met": true
+            }
+          ],
+          "all_pair_targets_met": true
+        },
+        {
+          "direction": 1,
+          "adaptive_p95_s": 0,
+          "fixed_p95_s": 0,
+          "combined_target_met": true,
+          "worst_pair_ratio": 0,
+          "pairs": [
+            {
+              "pair": 0,
+              "adaptive_p95_s": 0,
+              "fixed_p95_s": 0,
+              "ratio": null,
+              "absolute_difference_s": 0,
+              "target_met": true
+            }
+          ],
+          "all_pair_targets_met": true
+        },
+        {
+          "direction": 2,
+          "adaptive_p95_s": 0,
+          "fixed_p95_s": 0,
+          "combined_target_met": true,
+          "worst_pair_ratio": 0,
+          "pairs": [
+            {
+              "pair": 0,
+              "adaptive_p95_s": 0,
+              "fixed_p95_s": 0,
+              "ratio": null,
+              "absolute_difference_s": 0,
+              "target_met": true
+            }
+          ],
+          "all_pair_targets_met": true
+        },
+        {
+          "direction": 3,
+          "adaptive_p95_s": 0,
+          "fixed_p95_s": 0,
+          "combined_target_met": true,
+          "worst_pair_ratio": 0,
+          "pairs": [
+            {
+              "pair": 0,
+              "adaptive_p95_s": 0,
+              "fixed_p95_s": 0,
+              "ratio": null,
+              "absolute_difference_s": 0,
+              "target_met": true
+            }
+          ],
+          "all_pair_targets_met": true
+        }
+      ],
+      "no_skipped_phase": true,
+      "red_bound_pass": true,
+      "max_red_s": 0,
+      "numerical_target_met": true
+    },
+    "scope_notes": [
+      "all p95 directions and each pair reported; zero baseline uses absolute difference"
+    ]
+  },
+  "finished_at": "2026-11-12T10:16:42.776Z",
+  "performance_pass": false
+}

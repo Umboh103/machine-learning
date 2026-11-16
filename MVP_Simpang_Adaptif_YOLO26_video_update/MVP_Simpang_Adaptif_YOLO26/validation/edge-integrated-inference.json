@@ -1,0 +1,91 @@
+{
+  "scope": "Real inference smoke; ROI presence example, not production controller or accuracy acceptance",
+  "session_id": "4642d999-eaec-4a4b-ba1b-c288de911e10",
+  "model_family": "YOLO26",
+  "ultralytics_version": "8.4.210",
+  "nms_free": true,
+  "tracker": "ByteTrack",
+  "weights_sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+  "device": "cpu",
+  "imgsz_requested": 640,
+  "measurement_kind": "unique-tracked-ROI-presence; not stopped queue",
+  "last_detections": [
+    {
+      "id": 1,
+      "class_id": 5,
+      "confidence": 0.8103136420249939,
+      "box": [
+        0.01141459122300148,
+        0.21050211588541667,
+        0.9999680519104004,
+        0.7022090911865234
+      ]
+    }
+  ],
+  "last_proposal": {
+    "schema": "traffic-plan-proposal-v1",
+    "intersection_id": "simpang-demo",
+    "session_id": "4642d999-eaec-4a4b-ba1b-c288de911e10",
+    "seq": 8,
+    "source_epoch": 1,
+    "config_sha256": "91eb4d0dcdbe34b036093d5f9e5bcc7ad3eaa921478653f88a0e137c1297262b",
+    "created_at_utc_ms": 1794808102964,
+    "valid_until_utc_ms": 1794808104836,
+    "timestamp_basis": "edge_decode_arrival; camera exposure time is not measured",
+    "valid": true,
+    "reason": null,
+    "measurement_kind": "unique-tracked-ROI-presence; not stopped queue",
+    "phase_order": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "green_min_s": 1,
+    "green_max_s": 6,
+    "fallback_green_s": 1,
+    "rows": [
+      {
+        "phase": 0,
+        "vehicles": 1,
+        "by_class": {
+          "5": 1
+        },
+        "weighted_presence": 1.8
+      },
+      {
+        "phase": 1,
+        "vehicles": 0,
+        "by_class": {},
+        "weighted_presence": 0
+      },
+      {
+        "phase": 2,
+        "vehicles": 0,
+        "by_class": {},
+        "weighted_presence": 0
+      },
+      {
+        "phase": 3,
+        "vehicles": 0,
+        "by_class": {},
+        "weighted_presence": 0
+      }
+    ],
+    "green_s": [
+      4.6,
+      1,
+      1,
+      1
+    ],
+    "apply_at": "next-green-boundary-after-controller-clearance",
+    "output_scope": "simulator-proposals-only",
+    "frame_id": 109,
+    "media_time_s": 7.2
+  },
+  "processed_frames": 65,
+  "elapsed_wall_s": 7.66610520001268,
+  "effective_fps": 8.478881818617944,
+  "decode_arrival_to_observation_p95_ms": 230.255100002978,
+  "transport": "local-http-simulator"
+}

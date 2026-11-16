@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+*.pyc
+*.pt
+*.mp4
+*.avi
+outputs/
+data/
+*.engine
+*.onnx
+.pytest_cache/
+.ruff_cache/
+validation/*-failure.png
+validation/annotation-format-selfcheck.json
+validation/paired-demonstration.json
+validation/transport-fixture.mp4
+validation/transport-fixture.webm

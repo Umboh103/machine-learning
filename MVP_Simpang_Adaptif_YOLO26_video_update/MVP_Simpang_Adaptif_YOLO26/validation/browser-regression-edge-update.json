@@ -1,0 +1,58 @@
+{
+  "scope": "Local Chromium UI with real FastAPI and real YOLO; public photo-loop transport fixture, no accuracy acceptance",
+  "checks": [
+    {
+      "name": "simulation lifecycle, configuration lock, durable JSON",
+      "pass": true,
+      "session_id": "ce79c1ca-2fde-4447-9b3d-89a8412e1216"
+    },
+    {
+      "name": "CSV export",
+      "pass": true
+    },
+    {
+      "name": "conflicting movement configuration rejected",
+      "pass": true
+    },
+    {
+      "name": "source fault leaves clock and transitions running, applies fallback, recovers adaptively, and journals both modes",
+      "pass": true,
+      "session_id": "6864e732-6526-47f3-9959-3ffc3d299273"
+    },
+    {
+      "name": "ROI editor uses normalized displayed coordinates and configuration reload preserves geometry",
+      "pass": true
+    },
+    {
+      "name": "durable camera profile save/load, source readiness and explicit geometry verification",
+      "pass": true
+    },
+    {
+      "name": "real YOLO26/ByteTrack video selection, resize, IDs, media time, pause, EOF",
+      "pass": true,
+      "session_id": "ab89c74b-cdac-421b-8fbe-ace861cf5413",
+      "frames": 43,
+      "snapshots": 16,
+      "performance": {
+        "processed_frames": 43,
+        "effective_fps": 2.8075582078594077,
+        "active_wall_s": 15.315800000023824,
+        "model_startup_ms": 9413.359600002877,
+        "frame_to_snapshot_p95_ms": 1521.3999999761581,
+        "frame_width": 1280,
+        "frame_height": 720,
+        "scope": "Capture, encode, HTTP, inference, Observer and snapshot publication; preparation before playback reported separately; log acknowledgement excluded",
+        "acceptance": "Representative annotated video required"
+      }
+    },
+    {
+      "name": "recorded-CCTV decisions drive a separate synthetic vehicle simulator; pause and durable output logs verified",
+      "pass": true
+    },
+    {
+      "name": "mandatory journal failure stops session as failed; retry finalizes",
+      "pass": true
+    }
+  ],
+  "errors": []
+}

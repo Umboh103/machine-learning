@@ -1,0 +1,20 @@
+{
+  "schema": "simpang-annotations-v1",
+  "scope": "FORMAT EXAMPLE ONLY; not annotated acceptance data",
+  "source_id": "recording-01",
+  "source_name": "replace-with-recording-name.mp4",
+  "source_sha256": null,
+  "annotator": null,
+  "protocol": {"annotations_locked":false,"reviewers":[],"disagreements_resolved":false,"conditions":[],"calibration_sources":[],"test_sources":["recording-01"]},
+  "wait_tracks": [{"truth_id":"human-vehicle-1","matched_track_id":null,"truth_wait_s":2,"observed_wait_s":null}],
+  "served_intervals": [{"direction":0,"start_s":0,"end_s":10,"truth_count":0,"observed_count":0},{"direction":1,"start_s":0,"end_s":10,"truth_count":0,"observed_count":0},{"direction":2,"start_s":0,"end_s":10,"truth_count":0,"observed_count":0},{"direction":3,"start_s":0,"end_s":10,"truth_count":0,"observed_count":0}],
+  "frames": [{
+    "media_time": 0,
+    "truth": [{"id": "human-vehicle-1", "class_id": 2, "box": [0.38, 0.15, 0.40, 0.20]}],
+    "detections": [],
+    "truth_rows": [{"q": 1, "w": 2}, {"q": 0, "w": 0}, {"q": 0, "w": 0}, {"q": 0, "w": 0}],
+    "observed_rows": [{"q": 0, "w": 0, "valid": true}, {"q": 0, "w": 0, "valid": true}, {"q": 0, "w": 0, "valid": true}, {"q": 0, "w": 0, "valid": true}],
+    "truth_served": [0, 0, 0, 0],
+    "observed_served": [0, 0, 0, 0]
+  }]
+}

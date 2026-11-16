@@ -1,0 +1,12 @@
+{
+  "pass": true,
+  "sha256": "23ff721b5953999b01acf7b12c7e80f3ee453299b2f0b34b13b116977daef908",
+  "progress": [
+    0.4444444444444444,
+    0.8888888888888888,
+    1
+  ],
+  "bytes": 9437184,
+  "cancelled": "AbortError",
+  "scope": "Actual browser worker hashing a 9 MiB File, multiple bounded reads, SHA-256 agrees with Node crypto, cancellation verified"
+}

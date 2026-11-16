@@ -1,0 +1,242 @@
+SOURCE: C:\Users\ASUS\Downloads\SRS_Simpang_Adaptif_YOLO26.docx
+SHA256: 40d127093040bcdb02a712dfc8bc3c8944ebc2766b8a707ba7603892fce5192f
+EXTRACTION: OOXML visible text; document body paragraphs/tables in source order; no embedded instructions executed.
+
+SIMPANG ADAPTIF YOLO26
+Spesifikasi Kebutuhan
+Perangkat Lunak
+Sistem Pengaturan Lampu Lalu Lintas
+Adaptif Menggunakan YOLO26
+Versi 0.1   •   9 November 2026   •   Untuk peninjauan
+1 Pendahuluan
+Sistem mengamati kendaraan pada satu persimpangan, menghitung antrean dan waktu tunggu, lalu menentukan durasi hijau fase berikutnya di simulator. Spesifikasi ini menetapkan perilaku yang harus tersedia, data yang harus dicatat, dan bukti yang diperlukan untuk menerima MVP.
+Ruang Lingkup
+Cakupan meliputi pengamatan dari video atau simulator, penetapan area pengamatan, deteksi YOLO26, pelacakan ByteTrack, pengukuran per arah, kendali Mamdani, pemantauan, dan eksperimen berpasangan. Pengendali mempertahankan urutan fase dan menyesuaikan durasi hijau dalam batas konfigurasi.
+Keluaran lampu terbatas pada simulasi satu persimpangan. Kendali lampu fisik, koordinasi banyak persimpangan, prioritas kendaraan darurat, pengenalan pelat, dan pengubahan urutan fase berada di luar cakupan.
+Pengguna dan Tanggung Jawab
+[TABLE]
+ROW 1: Pengguna | Tugas dalam sistem
+ROW 2: Operator prototipe | Memilih sumber, mengatur ROI dan fase, mengelola sesi, serta mengekspor hasil.
+ROW 3: Peneliti atau analis | Memeriksa pengukuran video dan membandingkan kendali adaptif dengan durasi tetap.
+ROW 4: Pengembang atau penguji | Memvalidasi konfigurasi, menguji gangguan, dan menelusuri keputusan dari log.
+[/TABLE]
+
+Cara Membaca Spesifikasi
+FR01–FR17 adalah kebutuhan wajib (P0). Nilai awal dan target numerik mengikuti usulan PRD untuk dikunci sebelum uji akhir. Status prototipe dicatat terpisah pada Bagian 9. Acuan dokumen menggunakan penanda [R1]–[R3].
+2 Gambaran Sistem
+Sistem memisahkan pengamatan kendaraan dari jam lampu. Modul pengamatan menghasilkan snapshot antrean dan waktu tunggu. Pengendali memakai snapshot fase berikutnya ketika hijau aktif berakhir. Pemisahan ini memungkinkan transisi lampu tetap berlangsung saat pemrosesan frame terganggu.
+[TABLE]
+ROW 1: Jalur penggunaan | Sumber observasi | Tujuan dan status
+ROW 2: Demo simulasi | Telemetri dari simulator antrean. | Menjalankan alur kendali dan eksperimen awal. Tersedia pada dashboard daring.
+ROW 3: Pengukuran video | Frame rekaman persimpangan yang diproses YOLO26 dan ByteTrack. | Menilai akurasi pengamatan terhadap anotasi. Backend lokal tersedia dalam kode. Rekaman tetap mengikuti peristiwa yang sudah terekam.
+ROW 4: Simulasi visual terpadu | Frame hasil render kendaraan simulator yang diproses YOLO26 dan ByteTrack. | Menilai dampak kendali dengan galat persepsi ikut terukur. Jalur ini menjadi target integrasi.
+[/TABLE]
+
+
+Gambar 1. Jalur simulasi visual yang dipersyaratkan untuk evaluasi dampak [R1, R2].
+Alur Sesi Operator
+1. Siapkan sumber. Pilih video atau skenario simulasi, lalu muat konfigurasi persimpangan.
+2. Validasi konfigurasi. Tentukan ROI, garis keluar, fase, durasi, dan profil fuzzy. Perbaiki konfigurasi yang ditolak sebelum memulai.
+3. Jalankan sesi. Amati pengukuran dan transisi lampu. Gunakan jeda atau lanjut sesuai kebutuhan.
+4. Akhiri dan ekspor. Simpan hasil sesi. Untuk perbandingan, jalankan pasangan skenario dengan metadata yang setara.
+Lingkungan Operasi
+Dashboard berjalan di peramban. Mode video memerlukan backend lokal, bobot YOLO26, dan konfigurasi ByteTrack. Untuk uji terpadu, simulator harus menerima status lampu, menghasilkan frame, dan menyediakan data acuan yang dapat diekspor.
+3 Kebutuhan Fungsional
+Pengamatan Kendaraan
+Semua baris FR berprioritas P0. Kriteria pada tabel menjelaskan hasil yang harus dapat diamati saat pengujian. Definisi pengukuran yang digunakan untuk FR05–FR08 dijabarkan pada Bagian 4.
+Tabel 1. Kebutuhan pengamatan dan pengukuran
+[TABLE]
+ROW 1: ID | Kebutuhan sistem | Kriteria penerimaan
+ROW 2: FR01 | Membaca kamera atau berkas video, lalu menyesuaikan ukuran dan menormalisasi frame. | Frame memiliki timestamp dan ukuran asal. ROI dan deteksi tetap selaras setelah resize. Akhir berkas normal dibedakan dari kegagalan baca.
+ROW 3: FR02 | Membuat, menyimpan, dan memuat poligon ROI dengan label arah atau pergerakan. | ROI muncul kembali saat konfigurasi dimuat. Titik di luar ROI tidak masuk antrean. Pemetaan ambigu dan tumpang tindih ditolak.
+ROW 4: FR03 | Mendeteksi mobil, sepeda motor, bus, dan truk dengan YOLO26. | Deteksi memuat kelas, confidence, bounding box, dan timestamp. Pengukuran hanya memakai kelas yang dikonfigurasi.
+ROW 5: FR04 | Melacak kendaraan antarframe dengan ByteTrack dan menetapkan ID dalam satu sesi dan sumber. | ByteTrack dipilih eksplisit. ID dipakai lintas frame untuk track yang sama. Konfigurasi tracker tersimpan bersama sesi.
+ROW 6: FR05 | Menghitung antrean aktif per ROI dari kendaraan yang berhenti atau sangat lambat. | Setiap ID yang memenuhi ambang dihitung sekali per snapshot. Keluar ROI, bergerak kembali, dan track hilang mengikuti aturan pengamatan.
+ROW 7: FR06 | Mengestimasi waktu tunggu teramati untuk tiap kendaraan. | Akumulasi memakai selisih timestamp sumber. Celah pengamatan tidak ditambahkan. ID baru memulai riwayat tunggu baru.
+ROW 8: FR07 | Menerbitkan snapshot kondisi tiap arah dan fase. | Snapshot memuat Q, W maksimum, W rata-rata, timestamp, usia, dan validitas. Pengamatan kosong valid berbeda dari data tidak tersedia.
+ROW 9: FR08 | Menghitung kendaraan terlayani dari perpotongan garis keluar terarah atau kejadian keluar simulator. | Satu perlintasan yang memenuhi arah menambah hitungan sekali per ID dan arah. Hasil video diberi label estimasi berbasis tracking.
+[/TABLE]
+
+Versi bobot, kelas kendaraan, ambang deteksi, konfigurasi tracker, ROI, dan definisi pengukuran harus melekat pada identitas sesi. Perubahan definisi pengukuran memulai sesi baru.
+Kendali dan Operasi Sistem
+Keputusan lampu berlaku pada simulator. Pengujian kendali menilai urutan fase, batas durasi, penanganan gangguan, dan kesetaraan skenario eksperimen.
+Tabel 2. Kebutuhan pengendali dan penggunaan sistem
+[TABLE]
+ROW 1: ID | Kebutuhan sistem | Kriteria penerimaan
+ROW 2: FR09 | Menetapkan fase dari kelompok pergerakan yang kompatibel dan urutan yang tetap. | Konfigurasi memuat pemetaan ROI, fase, dan peta konflik. Fase dengan pergerakan berkonflik ditolak.
+ROW 3: FR10 | Menghitung hijau fase berikutnya dengan Mamdani menggunakan Q dan W maksimum fase tersebut. | Keputusan menggunakan satu snapshot valid. Log memuat nilai mentah, nilai hasil penjepitan, centroid, dan durasi final.
+ROW 4: FR11 | Menerapkan hijau dalam batas konfigurasi, diikuti kuning dan semua merah. | Kuning dan semua merah berjalan penuh sebelum hijau berikutnya. Durasi hijau aktif dan urutan fase tetap sampai transisi.
+ROW 5: FR12 | Memakai rencana hijau tetap per fase saat data tidak valid atau inferensi gagal. | Mode, alasan, waktu gangguan, dan penerapan durasi cadangan tercatat. Pemulihan mengikuti Bagian 5.
+ROW 6: FR13 | Menampilkan pengamatan, kualitas sumber, dan keadaan pengendali. | Tampilan memuat video atau simulator, ROI dan ID, antrean, tunggu, fase, sisa waktu, serta mode dan status validitas dalam teks.
+ROW 7: FR14 | Mencatat sesi dan mengekspor observasi, keputusan, transisi, gangguan, serta hasil eksperimen. | Ekspor memuat ID sesi, versi konfigurasi, satuan, dan catatan yang diwajibkan pada Bagian 6. Kegagalan catat wajib menghentikan sesi.
+ROW 8: FR15 | Mengelola mulai, jeda, lanjut, dan akhir sesi dengan status yang jelas. | Jeda membekukan waktu simulasi. Lanjut meneruskan fase dan sisa waktunya. Akhir normal menutup sesi dan menyimpan hasil.
+ROW 9: FR16 | Membandingkan pengendali adaptif dengan durasi tetap memakai skenario berpasangan. | Pasangan memakai kondisi awal, permintaan, horizon, dan aturan fase yang sama. Uji dampak akhir memakai umpan balik visual dan telemetri acuan terpisah.
+ROW 10: FR17 | Mengizinkan perubahan konfigurasi fase, konflik, durasi, atau fuzzy hanya saat sesi berhenti. | Edit saat berjalan atau dijeda ditolak. Batas terbalik, durasi negatif, aturan tanpa cakupan, dan durasi cadangan di luar batas ditolak.
+[/TABLE]
+
+4 Aturan Pengukuran Kendaraan
+Area dan Identitas Pengamatan
+ROI (Region of Interest) adalah poligon yang mewakili antrean satu arah atau pergerakan. Titik tengah sisi bawah bounding box menjadi titik acuan. Kendaraan berada dalam ROI ketika titik acuannya berada di dalam poligon. Setiap kendaraan bernilai satu unit. Jika belokan memiliki fase tersendiri, petakan pergerakannya ke ROI terpisah.
+ID track berlaku dalam kombinasi ID sesi dan ID sumber. Penambahan hitungan terlayani memakai kejadian melintasi garis keluar sesuai arah lintasan atau kejadian keluar dari simulator. Pergantian ID pada video dicatat sebagai sumber galat estimasi.
+Ambang dan Status Antrean
+Ukur perpindahan titik acuan pada selang sekitar satu detik. Bagi perpindahan dengan tinggi ROI dan selisih waktu dalam detik untuk memperoleh laju dalam satuan tinggi ROI per detik. Gunakan timestamp sumber saat frame dilewati atau pemutaran dipercepat. Nilai awal berikut dikalibrasi per kamera.
+Tabel 3. Parameter awal klasifikasi antrean
+[TABLE]
+ROW 1: Peristiwa | Kondisi awal dan tindakan
+ROW 2: Masuk antrean | Laju ≤ 0,01 tinggi ROI per detik selama minimal 1 detik di dalam ROI. Setelah terkonfirmasi, mulai hitung dari awal rentang konfirmasi yang teramati.
+ROW 3: Bergerak kembali | Laju > 0,02 tinggi ROI per detik selama 0,5 detik. Hentikan penambahan waktu tunggu sambil mempertahankan akumulasi track.
+ROW 4: Track hilang | Pertahankan status paling lama 1 detik dengan penanda estimasi. Jangan menambah waktu pada celah. Setelah batas lewat, keluarkan track dari antrean aktif.
+ROW 5: Track muncul kembali | Sambung riwayat jika tracker mempertahankan ID yang sama. ID baru mulai dari nol. Catat observasi tidak lengkap bila kendaraan keluar pandangan atau belum terlayani saat sesi berakhir.
+[/TABLE]
+
+Agregasi dan Validitas Snapshot
+Q adalah jumlah ID unik yang sedang mengantre. Pada fase dengan beberapa ROI, gabungkan ID tanpa duplikasi. W maksimum adalah waktu tunggu teramati terbesar dari kendaraan yang masih mengantre pada fase itu. Simpan W rata-rata untuk pemantauan.
+Terbitkan snapshot setiap 1 detik pada profil awal. Snapshot valid jika sumber dan pemrosesan sehat, timestamp meningkat, usia data ≤ 2 detik, dan semua ROI fase valid. Usia dihitung dari selisih waktu pemakaian dan timestamp observasi pada basis waktu yang sama. ROI sehat yang kosong menghasilkan Q dan W bernilai 0. Masukan yang tidak tersedia disimpan sebagai null disertai alasan.
+Waktu tunggu teramati terbatas pada rentang kendaraan dapat diamati. Evaluator simulator memakai waktu tunggu kebenaran acuan untuk pengujian dampak.
+5 Aturan Pengendali Lampu
+Profil Awal dan Urutan Fase
+Contoh profil MVP memakai empat fase lurus satu arah dengan urutan Utara, Timur, Selatan, lalu Barat. Fase terakhir kembali ke fase pertama. Profil untuk lokasi uji harus memiliki pemetaan ROI dan peta konflik yang sah. Fase yang sedang hijau menyelesaikan durasi yang sudah diputuskan.
+Tabel 4. Parameter awal kendali dan pemulihan
+[TABLE]
+ROW 1: Parameter | Nilai awal | Ketentuan
+ROW 2: Batas hijau | 10–60 detik | Setiap hijau hasil keputusan berada dalam batas fase.
+ROW 3: Hijau awal dan cadangan | 30 detik per fase | Nilai cadangan harus valid untuk setiap fase.
+ROW 4: Kuning dan semua merah | 3 detik dan 1 detik | Durasi tetap, dijalankan penuh pada setiap pergantian.
+ROW 5: Tick simulator | 0,1 detik | Resolusi jam simulasi dan pembulatan durasi hijau.
+ROW 6: Usia snapshot maksimum | 2 detik | Snapshot yang melewati batas tidak dapat dipakai.
+ROW 7: Pemulihan adaptif | 3 snapshot valid | Berturut-turut pada interval 1 detik. Berlaku pada keputusan fase berikutnya.
+[/TABLE]
+
+Transisi dan Penanganan Gangguan
+1. Mulai hijau. Saat sesi dimulai, gunakan fase dan durasi awal dari konfigurasi. Semua pergerakan di luar fase aktif tetap merah.
+2. Tentukan keputusan. Pada akhir hijau, ambil snapshot fase berikutnya. Pilih durasi adaptif atau cadangan, lalu kunci keputusan hingga diterapkan.
+3. Jalankan transisi. Selesaikan kuning pada fase yang berakhir dan semua merah sebelum fase berikutnya menjadi hijau. Kegagalan pemrosesan frame tidak menghentikan jam lampu.
+Saat sumber atau pipeline gagal, snapshot valid terakhir boleh dipakai selama usianya masih dalam batas. Tandai cadangan paling lama satu tick setelah data dinyatakan tidak valid. Jika inferensi fuzzy gagal, gunakan cadangan untuk keputusan tersebut. Catat waktu gangguan, perubahan mode, dan saat durasi cadangan mulai berlaku.
+Akhir berkas yang normal menutup sesi. Putus sumber di tengah sesi memicu penanganan gangguan. Kegagalan simulator atau pencatatan wajib menutup sesi berstatus gagal dan dicatat sejauh penyimpanan masih tersedia.
+Batas dari akhir hijau suatu fase hingga awal hijau fase yang sama adalah 196 detik waktu simulasi pada profil empat fase. Hitungannya mencakup tiga hijau maksimum 60 detik dan empat transisi 4 detik, di luar jeda operator.
+Inferensi Fuzzy Mamdani
+Fuzzy menentukan durasi hijau berdasarkan Q dan W maksimum fase yang akan dilayani. Tabel 5 dan 6 menetapkan profil awal untuk kalibrasi. Simpan profil yang telah dikunci bersama konfigurasi sesi.
+Tabel 5. Domain dan fungsi keanggotaan
+[TABLE]
+ROW 1: Variabel dan domain | Himpunan keanggotaan awal
+ROW 2: Q  0–30 kendaraan | Sedikit trap(0, 0, 3, 8)
+Sedang tri(5, 15, 25)
+Banyak trap(18, 25, 30, 30)
+ROW 3: W  0–120 detik | Singkat trap(0, 0, 10, 30)
+Sedang tri(20, 60, 100)
+Lama trap(80, 100, 120, 120)
+ROW 4: G  10–60 detik | Pendek trap(10, 10, 15, 25)
+Sedang tri(20, 35, 50)
+Panjang trap(45, 55, 60, 60)
+[/TABLE]
+
+tri menyatakan fungsi segitiga dan trap menyatakan fungsi trapesium. Titik berulang pada ujung domain membentuk bahu dengan keanggotaan penuh pada ujung tersebut.
+Tabel 6. Sembilan aturan durasi hijau
+[TABLE]
+ROW 1: Antrean | Tunggu singkat | Tunggu sedang | Tunggu lama
+ROW 2: Sedikit | Pendek | Sedang | Panjang
+ROW 3: Sedang | Sedang | Sedang | Panjang
+ROW 4: Banyak | Panjang | Panjang | Panjang
+[/TABLE]
+
+Langkah Inferensi
+1. Fuzzifikasi. Jepit Q atau W yang melebihi domain ke batas atas. Simpan nilai asli dan nilai hasil penjepitan. Fuzzifikasi keduanya memakai profil sesi.
+2. Evaluasi dan agregasi. Gunakan minimum untuk operator DAN dan pemotongan keluaran tiap aturan. Gabungkan keluaran semua aturan dengan maksimum.
+3. Defuzzifikasi. Hitung centroid dengan membagi integral durasi kali keanggotaan agregat dengan integral keanggotaan agregat pada domain G. Gunakan integrasi trapesium dengan langkah 0,1 detik pada profil awal.
+4. Batasi keluaran. Jepit centroid ke rentang hijau, bulatkan ke tick terdekat, lalu jepit kembali. Luas agregat nol, nilai tak terhingga atau bukan angka, dan profil tidak konsisten menghasilkan keputusan cadangan.
+Pada antrean kosong yang valid, Q dan W bernilai nol. Aturan tetap menghasilkan durasi hijau dalam batas. Perubahan batas hijau memerlukan penyesuaian domain keluaran dan validasi ulang.
+6 Antarmuka dan Rekaman Data
+Tabel 7. Antarmuka pengguna yang dipersyaratkan
+[TABLE]
+ROW 1: Layar | Isi dan tindakan utama
+ROW 2: Persiapan sesi | Pilih sumber dan profil fuzzy, lihat pratinjau, tandai ROI dan garis keluar, lalu atur pemetaan fase, urutan, dan durasi. Tombol Mulai aktif setelah konfigurasi valid.
+ROW 3: Pemantauan | Tampilkan bounding box, kelas dan ID pada video, ROI, tabel Q dan W per arah, lampu, hitung mundur, serta mode kendali. Tampilkan waktu frame terakhir, usia snapshot, dan alasan data tidak valid.
+ROW 4: Hasil dan eksperimen | Tampilkan tren antrean dan waktu tunggu, kendaraan terlayani, durasi hijau, kejadian cadangan, dan metrik per arah. Tandai kesetaraan pasangan dari metadata sebelum membandingkan.
+[/TABLE]
+
+Antarmuka pengamatan membawa identitas sumber, frame, timestamp, dan ukuran asal. Gunakan koordinat ternormalisasi 0–1 pada bidang gambar yang sama untuk deteksi dan ROI. Modul kendali menerima snapshot per fase dan mengirim status serta durasi lampu ke simulator.
+Data Minimum per Sesi
+Tabel 8. Rekaman minimum untuk audit dan evaluasi
+[TABLE]
+ROW 1: Rekaman | Kolom atau atribut minimum
+ROW 2: Sesi dan konfigurasi | session_id, source_id, waktu mulai, mode, versi atau hash konfigurasi, hash berkas sumber, versi bobot dan tracker, perangkat uji, ROI, fase, dan aturan fuzzy.
+ROW 3: Deteksi dan track | Timestamp sumber, frame_id, track_id, kelas, confidence, bounding box, ROI, status antrean, dan waktu tunggu teramati.
+ROW 4: Snapshot | Timestamp, ID ROI atau fase, Q, W maksimum, W rata-rata, usia, validitas, dan penanda estimasi.
+ROW 5: Keputusan dan transisi | Fase asal dan tujuan, waktu keputusan dan transisi, Q dan W mentah serta hasil penjepitan, centroid, durasi final, mode, alasan cadangan, dan waktu mulai serta pemulihannya.
+ROW 6: Eksperimen | scenario_id, seed, profil baseline, pemanasan, horizon, kebenaran acuan, metrik, antrean awal dan akhir, serta kendaraan belum terlayani.
+[/TABLE]
+
+Ekspor terstruktur mencantumkan ID sesi dan satuan. Gunakan CSV untuk data tabular dan JSON untuk konfigurasi serta kejadian keputusan. Nilai yang tidak tersedia disertai alasan. Batasi akses sumber dan ekspor pada pengguna proyek berwenang. Pemilik data menetapkan retensi sebelum rekaman lapangan digunakan.
+7 Kebutuhan Nonfungsional dan Target Dampak
+Angka di bawah adalah target penerimaan dari PRD [R1]. Profil pengukuran, perangkat uji, baseline, dan ambang akhir dikunci sebelum pengujian akhir.
+Tabel 9. Target kualitas sistem
+[TABLE]
+ROW 1: ID | Aspek | Target dan cara ukur
+ROW 2: NFR01 | Akurasi antrean | MAE ≤ 2 kendaraan per ROI dan p95 galat absolut ≤ 5 kendaraan pada anotasi manual yang dikunci.
+ROW 3: NFR02 | Akurasi kendaraan terlayani | WAPE ≤ 10% pada hitungan per arah dan interval. Jika total acuan nol, laporkan galat absolut dan positif palsu.
+ROW 4: NFR03 | Akurasi waktu tunggu teramati | MAE ≤ 3 detik pada track yang dapat dicocokkan. Laporkan proporsi track yang berhasil dicocokkan.
+ROW 5: NFR04 | Laju dan latensi | ≥ 10 frame/detik efektif pada satu video 1280 × 720 dan latensi frame ke snapshot p95 ≤ 1 detik. Catat perangkat uji.
+ROW 6: NFR05 | Konsistensi fase | Nol hijau berkonflik. Seluruh hijau dalam batas dan setiap transisi memenuhi durasi konfigurasi.
+ROW 7: NFR06 | Respons gangguan | Tandai cadangan paling lama satu tick setelah data tidak valid. Tidak ada transisi yang terlewati.
+ROW 8: NFR07 | Keandalan sesi | Simulasi 30 menit selesai tanpa kegagalan proses. Seluruh keputusan dan transisi memiliki log yang dapat dibaca.
+[/TABLE]
+
+Tabel 10. Target dampak pengaturan adaptif
+[TABLE]
+ROW 1: ID | Metrik | Target pengujian dampak
+ROW 2: KPI01 | Waktu tunggu | Rata-rata waktu tunggu kebenaran acuan turun ≥ 10% terhadap baseline pada gabungan pasangan.
+ROW 3: KPI02 | Antrean dan throughput | Antrean rata-rata berbobot waktu turun ≥ 10%. Throughput minimal 95% dari baseline pada horizon yang sama.
+ROW 4: KPI03 | Pemerataan layanan | Tidak ada fase terlewat. Waktu tunggu p95 setiap arah paling banyak 5% di atas baseline. Batas giliran pada Bagian 5 terpenuhi.
+[/TABLE]
+
+Definisi Metrik
+MAE adalah rerata galat absolut. WAPE membagi jumlah galat absolut dengan jumlah hitungan acuan, lalu menyatakannya sebagai persentase. Persentase perbaikan adalah nilai baseline dikurangi nilai adaptif, dibagi baseline, lalu dikalikan 100%. Jika baseline nol, laporkan selisih absolut.
+Rata-rata antrean dihitung dari luas kurva antrean dibagi lama jendela ukur. Throughput adalah jumlah keluar per jam ekuivalen. Waktu tunggu mencakup semua kendaraan yang masuk dalam jendela ukur, termasuk akumulasi kendaraan yang belum keluar pada akhir horizon.
+8 Verifikasi dan Kriteria Penerimaan
+Protokol Uji
+Gunakan sedikitnya 300 pasangan ROI dan timestamp serta 60 lintasan kendaraan beranotasi. Hitung perlintasan garis keluar pada interval tetap. Sertakan kondisi kosong, ringan, padat, sepeda motor, dan oklusi. Pisahkan kalibrasi dan uji berdasarkan klip atau periode. Dua penilai menyelesaikan selisih anotasi sebelum penilaian.
+Jalankan 15 pasangan simulasi dari tiga tingkat arus dan lima seed per tingkat. Setiap sesi berjalan 30 menit, dengan 5 menit pemanasan dan 25 menit pengukuran. Pasangan memakai geometri, rute, jadwal kedatangan, jenis kendaraan, kondisi awal, seed, serta transisi yang sama. Kalibrasi rencana hijau tetap pada data pengembangan lalu kunci sebelum uji akhir.
+Tabel 11. Matriks uji penerimaan dan keterlacakan kebutuhan
+[TABLE]
+ROW 1: Uji | Acuan | Bukti yang harus diperiksa
+ROW 2: AT01 | FR01–02 | Sumber dan ROI dapat dimuat ulang. Resize menjaga pemetaan titik ke ROI.
+ROW 3: AT02 | FR03–07 | Kendaraan yang berhenti dihitung satu kali. Gerak kembali mengeluarkannya dari antrean.
+ROW 4: AT03 | FR05–07 | Uji track hilang, ID baru, jalan kosong, dan lompatan timestamp menurut Bagian 4.
+ROW 5: AT04 | FR08 | Perlintasan sah menambah hitungan sekali per ID dan arah. Perlintasan balik tidak dihitung.
+ROW 6: AT05 | FR10–11 | Uji sembilan aturan, ujung dan tumpang tindih domain, penjepitan, serta agregasi nol.
+ROW 7: AT06 | FR09, 11, 17
+NFR05 | Periksa urutan, konflik, hijau, transisi, batas giliran, dan penolakan konfigurasi tidak valid.
+ROW 8: AT07 | FR12, NFR06 | Putus sumber atau gagalkan pipeline. Periksa waktu cadangan, kelanjutan transisi, dan pemulihan.
+ROW 9: AT08 | FR15 | Jeda, lanjut, akhir berkas, dan berhenti menghasilkan jam serta ringkasan yang konsisten.
+ROW 10: AT09 | FR13–14 | Periksa tampilan status, kelengkapan ekspor, perbedaan versi konfigurasi, serta kegagalan pencatatan.
+ROW 11: AT10 | FR16
+NFR01–07
+KPI01–03 | Jalankan uji anotasi, benchmark perangkat, dan 15 pasangan visual. Laporkan metrik per arah, per pasangan, gabungan, serta hasil yang gagal.
+[/TABLE]
+
+Penerimaan MVP memerlukan FR01–FR17, uji fungsional, NFR, dan laporan evaluasi lengkap. Klaim penurunan kemacetan mensyaratkan KPI01–KPI03. Laporkan sisa kendaraan dan variasi antarulangan. Pisahkan skenario gangguan dari uji dampak nominal.
+9 Keterlacakan dan Status Prototipe
+Tabel 12 menghubungkan langkah workflow [R2] dengan FR pada PRD [R1] dan kondisi implementasi yang tercatat pada paket MVP [R3]. Status pada tabel belum merupakan hasil penerimaan akhir.
+Tabel 12. Pemetaan workflow dan cakupan implementasi
+[TABLE]
+ROW 1: Langkah workflow | Kebutuhan | Kondisi pada prototipe
+ROW 2: 1–2 Sumber dan ROI | FR01–02 | Video berkas dan editor ROI tersedia. Akuisisi kamera langsung dan pengujian pemetaan pada rekaman belum tuntas.
+ROW 3: 3–4 Deteksi dan pelacakan | FR03–04 | Backend lokal memakai YOLO26 dan ByteTrack. Pengiriman video dibatasi sekitar 4 frame/detik. Inferensi nyata dan kestabilan ID masih perlu diuji.
+ROW 4: 5–6 Ukur dan ringkas | FR05–08 | Pengukuran track tersedia dalam kode. Garis keluar menerima perpotongan dari kedua arah. Akurasi terhadap anotasi manual masih perlu diuji.
+ROW 5: 7 Inferensi dan batas | FR09–11 | Mamdani dan batas hijau tersedia. Profil demo memakai empat arah tetap. Editor kelompok pergerakan dan konflik umum belum tersedia.
+ROW 6: 8 Terapkan lampu | FR11, 15, 17 | Transisi dan jeda berjalan pada simulator. Konfigurasi sesi dikunci saat aktif atau dijeda.
+ROW 7: 9 Pantau dan tangani gangguan | FR12–15 | Cadangan, tampilan, dan ekspor tersedia. Log sesi berada di memori tab. Penyimpanan tahan gangguan dan checksum berkas sumber belum tersedia.
+ROW 8: 10 Evaluasi | FR16, NFR, KPI | Perbandingan 15 pasangan memakai telemetri simulasi. Jalur visual terpadu, baseline terkalibrasi, dan uji KPI akhir masih diperlukan.
+[/TABLE]
+
+Keputusan yang Perlu Dikunci
+Tetapkan geometri lokasi, ROI, garis keluar terarah, peta konflik, serta konfigurasi fase yang akan diuji.
+Kalibrasi ambang kamera, profil Mamdani, dan baseline pada data pengembangan. Tetapkan bobot model dan konfigurasi tracker yang dipakai.
+Tetapkan simulator visual, perangkat uji, data anotasi, dan retensi rekaman sebelum pengujian akhir.
+Acuan Dokumen
+[R1] PRD Sistem Pengaturan Lampu Lalu Lintas Adaptif Menggunakan YOLO26. Versi 0.1, 2 November 2026. Bagian 2–10 menjadi acuan kebutuhan dan penerimaan.
+[R2] Workflow Penanganan Kemacetan Menggunakan YOLO26. Alur kerja 1–10 dan diagram alur algoritma.
+[R3] MVP_Simpang_Adaptif_YOLO26.zip. README.md dan MVP_STATUS.md menjadi acuan kondisi implementasi dan cakupan uji yang tersedia.
+
+[PART word/footer1.xml]
+	SRS Simpang Adaptif YOLO26  •  Versi 0.1	Halaman 1

@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "One consumer, locked config, distinct source observations and adaptive application ACK",
+      "pass": true,
+      "session_id": "bbf70e1d-d4dd-427a-8da6-fc2a8672cc76"
+    },
+    {
+      "name": "Pause freezes simulation and remaining phase time; resume works",
+      "pass": true
+    },
+    {
+      "name": "Producer silence expires observation and activates fallback",
+      "pass": true
+    },
+    {
+      "name": "End, full clearance, synthetic outputs and durable JSON/CSV",
+      "pass": true
+    },
+    {
+      "name": "Real YOLO26 NMS-free + ByteTrack recording -> local relay -> simulator ACK -> source-stop fallback",
+      "pass": true,
+      "session_id": "4642d999-eaec-4a4b-ba1b-c288de911e10",
+      "frames": 65,
+      "scope": "Public photo loop, accelerated simulator timing; not accuracy or field acceptance"
+    }
+  ],
+  "page_errors": [],
+  "scope": "Local foreground simulator integration, not physical lights or annotated evaluation"
+}

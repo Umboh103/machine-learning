@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Simulator Edge | Simpang Adaptif</title><link rel="stylesheet" href="edge.css"></head>
+<body><main>
+  <header><a href="/">← Dashboard Mamdani</a><span>LABORATORIUM LALU LINTAS · EDGE</span></header>
+  <div class="title"><div><p class="eyebrow">YOLO26 → BYTETRACK → USULAN → SIMULATOR</p><h1>Simulator penerima Edge</h1><p>Amati penerapan durasi dari agen Python pada kendaraan sintetis.</p></div><span id="status" role="status">BELUM TERHUBUNG</span></div>
+  <div class="notice">Contoh pengendali presence berbobot. Antrean dan waktu tunggu Mamdani tetap tersedia pada dashboard utama. Tidak ada keluaran lampu fisik.</div>
+  <section class="connect"><label>Sesi agen Python<select id="sessions"><option value="">Menunggu sesi Edge…</option></select></label><button id="refresh">Segarkan</button><button id="connect">Hubungkan simulator</button></section>
+  <p id="message" role="status">Jalankan agen dengan --simulator-url lalu pilih sesi dan hubungkan. Satu sesi hanya menerima satu tab pengendali.</p>
+  <div class="layout"><section class="card"><canvas id="scene" width="1280" height="720" aria-label="Kendaraan sintetis merespons lampu Edge"></canvas><div class="transport"><button id="pause" disabled>Jeda</button><button id="end" disabled>Akhiri sesi</button><span id="clock">0,0 detik</span></div><p class="muted">Simulator berjalan pada tab ini. Tab tersembunyi dijeda; koneksi yang hilang lebih dari 5 detik mengakhiri sesi. Rekaman sumber tidak berubah oleh lampu.</p></section>
+  <section class="card"><p class="eyebrow">FASE AKTIF</p><h2 id="phase">—</h2><p id="signal">—</p><strong id="remaining">—</strong><span> detik tersisa</span><p id="quality">Belum ada pengamatan</p><p id="decision">Keputusan dihitung saat hijau aktif berakhir.</p><p id="summary">Belum ada kendaraan simulator.</p><details><summary>Konfigurasi sesi (dikunci)</summary><pre id="config">—</pre></details></section></div>
+  <section class="card"><h2>Pengamatan ROI dari agen</h2><table><thead><tr><th>Lengan</th><th>Kendaraan dalam ROI</th><th>Beban berbobot</th><th>Usulan hijau</th></tr></thead><tbody id="rows"></tbody></table><p class="muted">Presence dalam ROI berbeda dari antrean berhenti. Telemetri kendaraan simulator hanya menjadi keluaran dan tidak masuk ke usulan agen.</p></section>
+  <footer><a id="json" hidden>Ekspor JSON</a><a id="csv" hidden>Ekspor CSV</a><span id="journal">Jurnal belum dimulai</span></footer>
+</main><script type="module" src="edge-dashboard.js"></script></body></html>

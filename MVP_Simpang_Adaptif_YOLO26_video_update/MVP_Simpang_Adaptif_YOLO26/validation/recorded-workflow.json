@@ -1,0 +1,65 @@
+{
+  "date": "2026-11-16",
+  "version": "0.3.0",
+  "source": "recorded CCTV file",
+  "output": "synthetic traffic simulator",
+  "functional_workflow_pass": true,
+  "overall_srs_acceptance": "pending",
+  "javascript": {
+    "pass": 60,
+    "total": 60
+  },
+  "backend_pytorch": {
+    "pass": 17,
+    "total": 17
+  },
+  "backend_onnx_same_suite": {
+    "pass": 17,
+    "total": 17
+  },
+  "browser": {
+    "pass": 9,
+    "total": 9,
+    "inference_engine": "ONNX CPU",
+    "evidence": "browser-check.json"
+  },
+  "large_file_worker": {
+    "pass": true,
+    "sha256": "23ff721b5953999b01acf7b12c7e80f3ee453299b2f0b34b13b116977daef908",
+    "progress": [
+      0.4444444444444444,
+      0.8888888888888888,
+      1
+    ],
+    "bytes": 9437184,
+    "cancelled": "AbortError",
+    "scope": "Actual browser worker hashing a 9 MiB File, multiple bounded reads, SHA-256 agrees with Node crypto, cancellation verified"
+  },
+  "video_pipeline": {
+    "name": "real YOLO26/ByteTrack video selection, resize, IDs, media time, pause, EOF",
+    "pass": true,
+    "session_id": "674283a9-8878-4cff-a6e8-dcb21c007427",
+    "frames": 101,
+    "snapshots": 16,
+    "performance": {
+      "processed_frames": 101,
+      "effective_fps": 6.438247011966862,
+      "active_wall_s": 15.687499999964253,
+      "model_startup_ms": 323.4535999945365,
+      "frame_to_snapshot_p95_ms": 380.0999999642372,
+      "frame_width": 1280,
+      "frame_height": 720,
+      "scope": "Capture, encode, HTTP, inference, Observer and snapshot publication; preparation before playback reported separately; log acknowledgement excluded",
+      "acceptance": "Representative annotated video required"
+    }
+  },
+  "recorded_traffic_impact_evaluated": false,
+  "physical_signal_output": false,
+  "limitations": [
+    "representative CCTV recording and annotations not yet supplied",
+    "effective FPS below 10 target",
+    "four ROI movements",
+    "tab must remain active; hidden tab pauses session",
+    "synthetic simulator output is not ground truth for recorded traffic"
+  ]
+}

@@ -1,0 +1,359 @@
+{
+  "scope": "Real YOLO26n+ByteTrack on Ultralytics packaged bus.jpg; no traffic ground truth or accuracy acceptance",
+  "source": "ultralytics/assets/bus.jpg",
+  "preparation": {
+    "ready": true,
+    "session_id": "test-session",
+    "startup_ms": 5580.2983999601565,
+    "metadata": {
+      "ultralytics": "8.4.210",
+      "weights": "yolo26n.pt",
+      "weights_sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+      "tracker": "bytetrack.yaml",
+      "tracker_config": {
+        "tracker_type": "bytetrack",
+        "track_high_thresh": 0.25,
+        "track_low_thresh": 0.1,
+        "new_track_thresh": 0.25,
+        "track_buffer": 30,
+        "match_thresh": 0.8,
+        "fuse_score": true,
+        "device": "cpu"
+      },
+      "class_ids": [
+        2,
+        3,
+        5,
+        7
+      ],
+      "confidence": 0.25,
+      "imgsz_requested": [
+        736,
+        1280
+      ],
+      "imgsz": [
+        736,
+        1280
+      ],
+      "device": "cpu",
+      "inference_ms": 5167.300599976443
+    },
+    "scope": "Model preparation on blank pixels; not a source observation"
+  },
+  "sessions": [
+    {
+      "valid": true,
+      "session_id": "test-session",
+      "media_time": 0.0,
+      "frame_id": 1,
+      "detections": [
+        {
+          "id": 1,
+          "class_id": 5,
+          "label": "bus",
+          "confidence": 0.8790969848632812,
+          "box": [
+            0.0015305136088971738,
+            0.21228730943467883,
+            0.9938073052300347,
+            0.6900731404622396
+          ],
+          "media_time": 0.0,
+          "frame_id": 1
+        }
+      ],
+      "metadata": {
+        "ultralytics": "8.4.210",
+        "weights": "yolo26n.pt",
+        "weights_sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+        "tracker": "bytetrack.yaml",
+        "tracker_config": {
+          "tracker_type": "bytetrack",
+          "track_high_thresh": 0.25,
+          "track_low_thresh": 0.1,
+          "new_track_thresh": 0.25,
+          "track_buffer": 30,
+          "match_thresh": 0.8,
+          "fuse_score": true,
+          "device": "cpu"
+        },
+        "class_ids": [
+          2,
+          3,
+          5,
+          7
+        ],
+        "confidence": 0.25,
+        "imgsz_requested": [
+          736,
+          1280
+        ],
+        "imgsz": [
+          736,
+          1280
+        ],
+        "device": "cpu",
+        "inference_ms": 224.29420001571998,
+        "frame_width": 540,
+        "frame_height": 720,
+        "decoded_width": 810,
+        "decoded_height": 1080,
+        "original_width": 810,
+        "original_height": 1080,
+        "coordinates": "normalized-to-decoded-frame",
+        "processing_ms": 256.5046999952756,
+        "lock_wait_ms": 32.09019999485463
+      }
+    },
+    {
+      "valid": true,
+      "session_id": "real-second",
+      "media_time": 0.0,
+      "frame_id": 1,
+      "detections": [
+        {
+          "id": 1,
+          "class_id": 5,
+          "label": "bus",
+          "confidence": 0.8790969848632812,
+          "box": [
+            0.0015305136088971738,
+            0.21228730943467883,
+            0.9938073052300347,
+            0.6900731404622396
+          ],
+          "media_time": 0.0,
+          "frame_id": 1
+        }
+      ],
+      "metadata": {
+        "ultralytics": "8.4.210",
+        "weights": "yolo26n.pt",
+        "weights_sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+        "tracker": "bytetrack.yaml",
+        "tracker_config": {
+          "tracker_type": "bytetrack",
+          "track_high_thresh": 0.25,
+          "track_low_thresh": 0.1,
+          "new_track_thresh": 0.25,
+          "track_buffer": 30,
+          "match_thresh": 0.8,
+          "fuse_score": true,
+          "device": "cpu"
+        },
+        "class_ids": [
+          2,
+          3,
+          5,
+          7
+        ],
+        "confidence": 0.25,
+        "imgsz_requested": [
+          736,
+          1280
+        ],
+        "imgsz": [
+          736,
+          1280
+        ],
+        "device": "cpu",
+        "inference_ms": 174.82430004747584,
+        "frame_width": 540,
+        "frame_height": 720,
+        "decoded_width": 810,
+        "decoded_height": 1080,
+        "original_width": 810,
+        "original_height": 1080,
+        "coordinates": "normalized-to-decoded-frame",
+        "processing_ms": 201.9356000237167,
+        "lock_wait_ms": 26.98620001319796
+      }
+    },
+    {
+      "valid": true,
+      "session_id": "test-session",
+      "media_time": 0.1,
+      "frame_id": 2,
+      "detections": [
+        {
+          "id": 1,
+          "class_id": 5,
+          "label": "bus",
+          "confidence": 0.8790969848632812,
+          "box": [
+            0.0015305136088971738,
+            0.21228730943467883,
+            0.9938073052300347,
+            0.6900731404622396
+          ],
+          "media_time": 0.1,
+          "frame_id": 2
+        }
+      ],
+      "metadata": {
+        "ultralytics": "8.4.210",
+        "weights": "yolo26n.pt",
+        "weights_sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+        "tracker": "bytetrack.yaml",
+        "tracker_config": {
+          "tracker_type": "bytetrack",
+          "track_high_thresh": 0.25,
+          "track_low_thresh": 0.1,
+          "new_track_thresh": 0.25,
+          "track_buffer": 30,
+          "match_thresh": 0.8,
+          "fuse_score": true,
+          "device": "cpu"
+        },
+        "class_ids": [
+          2,
+          3,
+          5,
+          7
+        ],
+        "confidence": 0.25,
+        "imgsz_requested": [
+          736,
+          1280
+        ],
+        "imgsz": [
+          736,
+          1280
+        ],
+        "device": "cpu",
+        "inference_ms": 151.41350001795217,
+        "frame_width": 540,
+        "frame_height": 720,
+        "decoded_width": 810,
+        "decoded_height": 1080,
+        "original_width": 810,
+        "original_height": 1080,
+        "coordinates": "normalized-to-decoded-frame",
+        "processing_ms": 181.10640003578737,
+        "lock_wait_ms": 29.580900038126856
+      }
+    }
+  ],
+  "empty": {
+    "valid": true,
+    "session_id": "test-session",
+    "media_time": 0.2,
+    "frame_id": 3,
+    "detections": [],
+    "metadata": {
+      "ultralytics": "8.4.210",
+      "weights": "yolo26n.pt",
+      "weights_sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+      "tracker": "bytetrack.yaml",
+      "tracker_config": {
+        "tracker_type": "bytetrack",
+        "track_high_thresh": 0.25,
+        "track_low_thresh": 0.1,
+        "new_track_thresh": 0.25,
+        "track_buffer": 30,
+        "match_thresh": 0.8,
+        "fuse_score": true,
+        "device": "cpu"
+      },
+      "class_ids": [
+        2,
+        3,
+        5,
+        7
+      ],
+      "confidence": 0.25,
+      "imgsz_requested": [
+        736,
+        1280
+      ],
+      "imgsz": [
+        736,
+        1280
+      ],
+      "device": "cpu",
+      "inference_ms": 321.10920001287013,
+      "frame_width": 1280,
+      "frame_height": 720,
+      "decoded_width": 1280,
+      "decoded_height": 720,
+      "original_width": 1280,
+      "original_height": 720,
+      "coordinates": "normalized-to-decoded-frame",
+      "processing_ms": 341.8334000161849,
+      "lock_wait_ms": 20.599700044840574
+    }
+  },
+  "reset": {
+    "valid": true,
+    "session_id": "test-session",
+    "media_time": 0.0,
+    "frame_id": 1,
+    "detections": [
+      {
+        "id": 1,
+        "class_id": 5,
+        "label": "bus",
+        "confidence": 0.8790969848632812,
+        "box": [
+          0.0015305136088971738,
+          0.21228730943467883,
+          0.9938073052300347,
+          0.6900731404622396
+        ],
+        "media_time": 0.0,
+        "frame_id": 1
+      }
+    ],
+    "metadata": {
+      "ultralytics": "8.4.210",
+      "weights": "yolo26n.pt",
+      "weights_sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+      "tracker": "bytetrack.yaml",
+      "tracker_config": {
+        "tracker_type": "bytetrack",
+        "track_high_thresh": 0.25,
+        "track_low_thresh": 0.1,
+        "new_track_thresh": 0.25,
+        "track_buffer": 30,
+        "match_thresh": 0.8,
+        "fuse_score": true,
+        "device": "cpu"
+      },
+      "class_ids": [
+        2,
+        3,
+        5,
+        7
+      ],
+      "confidence": 0.25,
+      "imgsz_requested": [
+        736,
+        1280
+      ],
+      "imgsz": [
+        736,
+        1280
+      ],
+      "device": "cpu",
+      "inference_ms": 191.534900048282,
+      "frame_width": 540,
+      "frame_height": 720,
+      "decoded_width": 810,
+      "decoded_height": 1080,
+      "original_width": 810,
+      "original_height": 1080,
+      "coordinates": "normalized-to-decoded-frame",
+      "processing_ms": 224.75629998371005,
+      "lock_wait_ms": 33.11070002382621
+    }
+  },
+  "checks": {
+    "tracked_vehicle": true,
+    "stable_id": true,
+    "session_isolation": true,
+    "normalized_coordinates": true,
+    "valid_empty": true,
+    "tracker_reset": true
+  },
+  "weights": "yolo26n.pt"
+}

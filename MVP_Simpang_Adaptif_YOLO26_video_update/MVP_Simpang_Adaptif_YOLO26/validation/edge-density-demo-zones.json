@@ -1,0 +1,101 @@
+{
+  "intersection_id": "simpang-demo",
+  "phase_names": [
+    "Utara",
+    "Timur",
+    "Selatan",
+    "Barat"
+  ],
+  "phase_order": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "rois": [
+    [
+      [
+        0.2,
+        0.2
+      ],
+      [
+        0.8,
+        0.2
+      ],
+      [
+        0.8,
+        0.85
+      ],
+      [
+        0.2,
+        0.85
+      ]
+    ],
+    [
+      [
+        0.01,
+        0.01
+      ],
+      [
+        0.1,
+        0.01
+      ],
+      [
+        0.1,
+        0.1
+      ],
+      [
+        0.01,
+        0.1
+      ]
+    ],
+    [
+      [
+        0.9,
+        0.01
+      ],
+      [
+        0.99,
+        0.01
+      ],
+      [
+        0.99,
+        0.1
+      ],
+      [
+        0.9,
+        0.1
+      ]
+    ],
+    [
+      [
+        0.01,
+        0.9
+      ],
+      [
+        0.1,
+        0.9
+      ],
+      [
+        0.1,
+        0.99
+      ],
+      [
+        0.01,
+        0.99
+      ]
+    ]
+  ],
+  "vehicle_weights": {
+    "2": 1.0,
+    "3": 0.25,
+    "5": 1.8,
+    "7": 2.0
+  },
+  "green_min_s": 10.0,
+  "green_max_s": 60.0,
+  "fallback_green_s": 30.0,
+  "seconds_per_equivalent_vehicle": 2.0,
+  "snapshot_max_age_s": 2.0,
+  "note": "Transport demonstration zones for the public photo loop only; not a calibrated road intersection."
+}

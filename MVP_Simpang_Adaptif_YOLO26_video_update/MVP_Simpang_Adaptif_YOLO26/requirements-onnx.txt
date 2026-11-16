@@ -1,0 +1,4 @@
+# Optional CPU runtime; default installation continues to use PyTorch.
+-r requirements.txt
+onnx>=1.23,<2
+onnxruntime>=1.31,<2
