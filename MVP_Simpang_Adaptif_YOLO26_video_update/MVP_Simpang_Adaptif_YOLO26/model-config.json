@@ -1,0 +1,15 @@
+{
+  "weights": "weights/best.pt",
+  "vehicleClasses": [0, 1, 2, 3, 4, 5, 6],
+  "classNames": {
+    "0": "bicycle",
+    "1": "bus",
+    "2": "car",
+    "3": "motorbike",
+    "4": "rickshaw",
+    "5": "truck",
+    "6": "van"
+  },
+  "confidence": 0.25,
+  "imgsz": 640
+}

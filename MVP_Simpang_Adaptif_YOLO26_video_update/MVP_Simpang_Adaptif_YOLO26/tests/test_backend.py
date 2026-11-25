@@ -55,6 +55,16 @@ class BackendTests(unittest.TestCase):
         self.assertIn("local_backend", self.client.get("/api/health").json())
         self.assertEqual(self.client.get("/api/health", headers={"host": "evil.example"}).status_code, 400)
 
+    def test_active_model_profile_is_shared_with_dashboard_and_session_defaults(self):
+        profile = self.client.get('/api/health').json()['detector_profile']
+        settings = backend.inference_settings({})
+        self.assertEqual(settings['classes'], profile['vehicleClasses'])
+        self.assertEqual(settings['imgsz'], profile['imgsz'])
+        self.assertEqual(settings['confidence'], profile['confidence'])
+        exported = self.client.get('/api/sessions/test-session/export').json()
+        self.assertEqual(exported['model_initial']['class_ids'], profile['vehicleClasses'])
+        self.assertEqual(exported['model_initial']['weights'], profile['weights'])
+
     def test_fixed_onnx_input_size_is_distinct_from_requested_inference_size(self):
         session=SimpleNamespace(get_inputs=lambda:[SimpleNamespace(shape=[1,3,384,640])])
         runtime=SimpleNamespace(predictor=SimpleNamespace(model=SimpleNamespace(session=session),imgsz=[736,1280]))
@@ -217,7 +227,7 @@ class BackendTests(unittest.TestCase):
         self.assertEqual(self.client.post("/api/track", files={"frame": ("x.jpg", b"")}).status_code, 400)
         self.assertEqual(self.client.post("/api/track", files={"frame": ("x.jpg", self.image())}, data={"session_id": "test-session"}).status_code, 422)
 
-    @unittest.skipUnless(os.environ.get("SIMPANG_REAL_INFERENCE") == "1", "Set SIMPANG_REAL_INFERENCE=1 for downloaded YOLO26 weights")
+    @unittest.skipUnless(os.environ.get("SIMPANG_REAL_INFERENCE") == "1", "Set SIMPANG_REAL_INFERENCE=1 for real local YOLO weights")
     def test_real_yolo_bytetrack_sample_persistence_isolation_and_empty(self):
         import torch
         import ultralytics
@@ -234,7 +244,7 @@ class BackendTests(unittest.TestCase):
         for result in results:
             self.assertTrue(result.get("valid"), result)
             self.assertTrue(result["detections"], "Official bus sample must produce at least one tracked vehicle")
-            self.assertTrue(all(d["class_id"] in [2, 3, 5, 7] for d in result["detections"]))
+            self.assertTrue(all(d["class_id"] in backend.inference_settings({})['classes'] for d in result["detections"]))
             self.assertTrue(all(0 <= coordinate <= 1 for d in result["detections"] for coordinate in d["box"]))
         first_ids = [d["id"] for d in results[0]["detections"]]
         self.assertEqual(first_ids, [d["id"] for d in results[1]["detections"]])
@@ -245,7 +255,7 @@ class BackendTests(unittest.TestCase):
         self.assertEqual(self.client.post("/api/reset?session_id=test-session").status_code, 200)
         reset = self.track(0, 1, image=raw).json()
         self.assertEqual(first_ids, [d["id"] for d in reset["detections"]])
-        report = {"scope": "Real YOLO26n+ByteTrack on Ultralytics packaged bus.jpg; no traffic ground truth or accuracy acceptance",
+        report = {"scope": "Selected YOLO checkpoint+ByteTrack on Ultralytics packaged bus.jpg; no traffic ground truth or accuracy acceptance",
                   "source": "ultralytics/assets/bus.jpg", "preparation": prepared.json(), "sessions": results, "empty": empty, "reset": reset,
                   "checks": {"tracked_vehicle": True, "stable_id": True, "session_isolation": True, "normalized_coordinates": True, "valid_empty": True, "tracker_reset": True}}
         target = Path(os.environ.get("SIMPANG_REAL_REPORT", backend.ROOT / "validation" / "real-inference-smoke.json"))

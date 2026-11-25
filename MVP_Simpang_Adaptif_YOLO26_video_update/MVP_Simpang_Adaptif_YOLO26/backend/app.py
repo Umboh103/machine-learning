@@ -23,6 +23,7 @@ from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from .storage import SessionStore, encode
 from .edge_bridge import make_edge_router
+from .model_profile import load_model_profile
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = Path(os.environ.get("SIMPANG_DATA_DIR", ROOT / "data"))
@@ -33,7 +34,8 @@ app.add_middleware(TrustedHostMiddleware, allowed_hosts=["127.0.0.1", "localhost
 store = SessionStore(DATA / "sessions.sqlite3")
 model = None
 model_lock = threading.Lock()
-weights = os.environ.get("YOLO_WEIGHTS", str(ROOT / "weights" / "yolo26n.pt"))
+selected_checkpoint, detector_profile = load_model_profile(ROOT)
+weights = str(selected_checkpoint)
 weights_hash = None
 tracker_sets = {}
 frame_clocks = {}
@@ -164,9 +166,9 @@ def persist(session_id, events):
 
 
 def inference_settings(config):
-    classes = config.get("vehicleClasses", [2, 3, 5, 7])
-    confidence = config.get("confidence", .25)
-    imgsz = config.get("imgsz", [736, 1280])
+    classes = config.get("vehicleClasses", detector_profile['vehicleClasses'])
+    confidence = config.get("confidence", detector_profile['confidence'])
+    imgsz = config.get("imgsz", detector_profile['imgsz'])
     if (not isinstance(classes, list) or not classes or len(classes) > 100 or
             any(type(value) is not int or not 0 <= value <= 9999 for value in classes) or len(set(classes)) != len(classes)):
         raise HTTPException(422, "vehicleClasses harus daftar class ID unik nonnegatif")
@@ -226,7 +228,8 @@ def health():
     return {"local_backend": True, "model_loaded": model is not None, "weights": Path(weights).name,
             "weights_available": Path(weights).is_file(), "journal": "sqlite-WAL-synchronous-FULL",
             "model_device": runtime_device(), "latest_performance": latest_performance,
-            "coordinate_system": "normalized-to-decoded-frame", "version": app.version}
+            "coordinate_system": "normalized-to-decoded-frame", "version": app.version,
+            "detector_profile": detector_profile}
 
 
 @app.post("/api/sessions", status_code=201)

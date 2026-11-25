@@ -1,5 +1,13 @@
 # Simpang Adaptif YOLO26
 
+## Model hasil training Kaggle
+
+Konfigurasi lokal pada `model-config.json` memilih `weights/best.pt`, confidence 0,25 dan ukuran inferensi 640. Checkpoint `weights/best.pt` disertakan di repositori agar hasil clone memakai model training yang sama. Kelas model: `0 bicycle`, `1 bus`, `2 car`, `3 motorbike`, `4 rickshaw`, `5 truck`, `6 van`. Ketujuh kelas dihitung sebagai kendaraan.
+
+Jalankan `start.cmd` seperti biasa. Dashboard menampilkan nama bobot aktif dan menyesuaikan kelas/ukuran inferensi saat identitas model berubah; ROI dan pengaturan lampu tetap dipertahankan. Konfigurasi/profil kamera lama juga disesuaikan ketika dimuat. Pilihan kelas dan threshold yang diedit untuk model yang sama tetap dipertahankan.
+
+`start.cmd --weights weights/yolo26n.pt` memilih model bawaan secara eksplisit. `YOLO_WEIGHTS` juga dapat memilih checkpoint; argumen `--weights` memiliki prioritas tertinggi. Untuk ONNX model hasil training, siapkan `weights/best.onnx` sebelum menjalankan `start.cmd --engine onnx`. Kinerja/akurasi ukuran 640 pada video lokasi tetap perlu diukur.
+
 Aplikasi lokal untuk memakai **berkas rekaman CCTV sebagai pengamatan dan simulator sebagai keluaran lampu**. YOLO26/ByteTrack mengukur kendaraan pada rekaman; Mamdani menentukan hijau berikutnya; lampu itu menggerakkan kendaraan sintetis pada panel simulator. Versi 0.3.1 diperbarui 16 November 2026. Akurasi lapangan, target performa SRS dan KPI belum diterima.
 
 Untuk pengembangan Edge-AI/IoT, tersedia [rancangan YOLO26, SMP, fase dan komunikasi kontroler](docs/EDGE_AI_TRAFFIC_DESIGN.md) beserta [agen Python dan simulator Edge](examples/edge_density/README.md). Versi 0.3.1 menghubungkan agen ke halaman `/edge.html` melalui HTTP lokal, dengan penerapan durasi, ACK simulator, jurnal dan ekspor. Jalur ini memakai presence berbobot dan terpisah dari antrean/waktu tunggu Mamdani pada dashboard utama. MQTT masih berupa contoh publisher; keluaran perangkat fisik belum tersedia.
@@ -80,7 +88,7 @@ py -m venv .venv
 .\.venv\Scripts\python.exe -m uvicorn backend.app:app --host 127.0.0.1 --port 8000
 ```
 
-Semua mode memakai backend untuk jurnal sesi. Buka aplikasi melalui server, karena dashboard menggunakan ES modules. Model dimuat pada inferensi pertama dan bobot awal dapat memerlukan internet. Default bobot adalah `weights/yolo26n.pt`; `YOLO_WEIGHTS` dapat menunjuk bobot lokal alternatif. Identitas bobot dan checksum dicatat. Bobot custom harus sesuai dengan kelas kendaraan dalam konfigurasi.
+Semua mode memakai backend untuk jurnal sesi. Buka aplikasi melalui server, karena dashboard menggunakan ES modules. Model dimuat pada inferensi pertama dan bobot awal dapat memerlukan internet. Bobot default mengikuti `model-config.json` (`weights/best.pt` pada konfigurasi ini); tanpa berkas konfigurasi model, default adalah `weights/yolo26n.pt`. `YOLO_WEIGHTS` dapat menunjuk bobot lokal alternatif. Identitas bobot dan checksum dicatat. Bobot custom harus sesuai dengan kelas kendaraan dalam konfigurasi.
 
 ## Menyiapkan dan menjalankan sesi
 
@@ -125,7 +133,7 @@ Implementasi saat ini menyediakan empat ROI yang dapat diberi label pergerakan d
 
 Snapshot tidak valid/kedaluwarsa atau kegagalan fuzzy memakai rencana tetap fase tujuan. Penanda cadangan muncul dalam satu tick. Pemulihan memerlukan tiga snapshot valid berturut-turut pada publikasi satu detik, dengan timestamp observasi yang berbeda; perubahan adaptif berlaku pada keputusan berikutnya. Log mencatat awal gangguan, pemulihan, keputusan cadangan, dan waktu penerapan. Pada profil empat fase dengan maksimum hijau 60 detik, batas dari akhir hijau sampai hijau fase yang sama kembali adalah 196 detik, di luar jeda operator.
 
-`vehicleClasses` default `[2,3,5,7]`, `confidence` default 0,25, dan `imgsz` default 1280. Mengurangi ukuran inferensi mengubah profil pengamatan dan memerlukan validasi akurasi baru.
+Pada model hasil training yang aktif, `vehicleClasses` default `[0,1,2,3,4,5,6]`, `confidence` 0,25, dan `imgsz` 640, sesuai `model-config.json`. Model bawaan COCO memakai `[2,3,5,7]`. Mengubah ukuran inferensi mengubah profil pengamatan dan memerlukan validasi akurasi baru.
 
 ## Penyimpanan dan ekspor
 

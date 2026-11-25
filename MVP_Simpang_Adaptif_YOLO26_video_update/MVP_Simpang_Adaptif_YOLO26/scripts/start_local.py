@@ -13,6 +13,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--port', type=int, default=8000)
     parser.add_argument('--engine', choices=['pytorch', 'onnx'], default='pytorch')
+    parser.add_argument('--weights', help='Path checkpoint lokal; default mengikuti model-config.json')
     args = parser.parse_args()
     if not 1 <= args.port <= 65535:
         parser.error('Port harus 1–65535')
@@ -22,7 +23,8 @@ def main():
         raise SystemExit('Instal requirements.txt menggunakan interpreter virtual environment ini terlebih dahulu.')
     if args.engine == 'onnx' and importlib.util.find_spec('onnxruntime') is None:
         raise SystemExit('Runtime ONNX belum tersedia. Instal requirements-onnx.txt menggunakan interpreter ini.')
-    checkpoint = ROOT / 'weights' / ('yolo26n.onnx' if args.engine == 'onnx' else 'yolo26n.pt')
+    from backend.model_profile import load_model_profile
+    checkpoint, profile = load_model_profile(ROOT, override=args.weights, engine=args.engine)
     if not checkpoint.is_file():
         raise SystemExit(f'Bobot belum tersedia: {checkpoint}. Siapkan bobot lokal sebelum menjalankan aplikasi.')
     os.environ['YOLO_WEIGHTS'] = str(checkpoint)
@@ -33,6 +35,7 @@ def main():
         raise SystemExit(f'Port {args.port} sedang dipakai. Tutup proses terkait atau pilih --port lain.')
     print(f'Interpreter: {sys.executable}', flush=True)
     print(f'Runtime: {args.engine}; keluaran: simulator', flush=True)
+    print(f'Model: {checkpoint.name}; kelas kendaraan: {profile["vehicleClasses"]}', flush=True)
     print(f'Buka http://127.0.0.1:{args.port}', flush=True)
     print('Pilih rekaman CCTV, muat/tandai profil kamera, konfirmasi ROI, lalu mulai sesi.', flush=True)
     import uvicorn

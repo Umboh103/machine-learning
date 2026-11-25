@@ -3,6 +3,7 @@ import {VisualSimulation, renderSimulationFrame} from './visual-simulator.js';
 import {SessionLog} from './session-log.js';
 import {RecordedSimulator} from './recorded-simulator.js';
 import {FileHash} from './file-hash.js';
+import {applyModelProfile} from './model-profile.js';
 
 const $=id=>document.getElementById(id);
 const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -15,6 +16,7 @@ let edit=null,points=[],experiment=null,presentedTime=-1,hasObserved=false;
 let latestMeasurement=null,lastPublication=-1,lastLatencyFrame=-1;
 let startupMs=null;
 let recorded=null,lastOutput=-1,profileId=null,backendOnline=null,hashProgress=0,fileGeneration=0,configDirty=false;
+let backendDetector=null;
 const fileHash=new FileHash();
 const scene=$('scene'),ctx=scene.getContext('2d'),video=$('video');
 const capture=document.createElement('canvas'),observed=document.createElement('canvas');
@@ -113,13 +115,13 @@ function saveConfiguration(){try{
   assertConfig();const c=structuredClone(config);for(const k of ['seed','fixed','yellow','allred'])c[k]=Number($(k).value);c.level=$('level').value;
   Object.assign(c,JSON.parse($('phaseJson').value));const fuzzy=JSON.parse($('fuzzyJson').value);if(fuzzy)c.fuzzy=fuzzy;else delete c.fuzzy;
   Object.assign(c,JSON.parse($('measurementJson').value));
-  c.exitDirections??=DIRS.map(()=>'outward');c.exitDirections[+$('roiDir').value]=$('exitDirection').value;config=validate(c);source=$('source').value;mode=$('controllerMode').value;
+  c.exitDirections??=DIRS.map(()=>'outward');c.exitDirections[+$('roiDir').value]=$('exitDirection').value;config=validate(applyModelProfile(c,backendDetector));source=$('source').value;mode=$('controllerMode').value;
   if(source==='video'&&video.videoWidth&&$('geometryConfirmed').checked)config.cameraGeometry={width:video.videoWidth,height:video.videoHeight,profile_id:profileId};
   configDirty=false;localStorage.setItem('simpang-config',JSON.stringify(config));reset();fillConfig();updateSource();toast('Konfigurasi disimpan.');return true;
 }catch(e){toast(e.message);return false;}}
 $('saveConfig').onclick=saveConfiguration;
 $('downloadConfig').onclick=()=>download('konfigurasi-simpang.json',config);
-$('importConfig').onchange=async e=>{try{assertConfig();config=validate(JSON.parse(await e.target.files[0].text()));configDirty=false;$('geometryConfirmed').checked=false;localStorage.setItem('simpang-config',JSON.stringify(config));fillConfig();reset();}catch(e){toast(e.message);}};
+$('importConfig').onchange=async e=>{try{assertConfig();config=validate(applyModelProfile(JSON.parse(await e.target.files[0].text()),backendDetector));configDirty=false;$('geometryConfirmed').checked=false;localStorage.setItem('simpang-config',JSON.stringify(config));fillConfig();reset();}catch(e){toast(e.message);}};
 $('videoFile').onchange=e=>{
   if(active())return;const file=e.target.files[0];if(!file)return;if(videoUrl)URL.revokeObjectURL(videoUrl);sourceHash=null;hashProgress=0;const token=++fileGeneration;let loaded=false;
   $('geometryConfirmed').checked=false;
@@ -227,12 +229,21 @@ function drawOutput(){
   $('outputSummary').textContent=`Waktu simulator ${recorded.time.toFixed(1)} dtk · ${recorded.cars.length} kendaraan sintetis aktif · ${recorded.departed.length} keluar · fase ${controller.phaseName} · arus ${config.level} · seed ${config.seed}`;
 }
 function showSourceInfo(){const file=$('videoFile').files[0];$('sourceStatus').textContent=file?`${file.name} · ${(file.size/1024/1024).toFixed(1)} MB${video.videoWidth?' · '+video.videoWidth+' × '+video.videoHeight+' · '+video.duration.toFixed(1)+' dtk':''} · ${sourceHash?'checksum siap':'checksum '+Math.round(hashProgress*100)+'%'}`:'Belum ada rekaman.';}
-async function refreshBackend(){try{const r=await fetch('/api/health',{signal:AbortSignal.timeout(4000)});if(!r.ok)throw Error();const h=await r.json(),[major,minor]=String(h.version??'0.0').split('.').map(Number);backendOnline=h.local_backend===true&&(major>=1||major===0&&minor>=3);$('backendStatus').textContent=backendOnline?`Backend lokal · ${h.model_device==='not-loaded'?'model siap dimuat':h.model_device}`:'Backend versi lama; jalankan ulang start.cmd';}catch{backendOnline=false;$('backendStatus').textContent='Backend tidak terhubung';}$('backendStatus').classList.toggle('offline',!backendOnline);lock();}
+async function refreshBackend(){try{
+  const r=await fetch('/api/health',{signal:AbortSignal.timeout(4000)});if(!r.ok)throw Error();
+  const h=await r.json(),[major,minor]=String(h.version??'0.0').split('.').map(Number);
+  backendOnline=h.local_backend===true&&(major>=1||major===0&&minor>=3);backendDetector=h.detector_profile??null;
+  if(backendOnline&&!active()&&!transitioning&&!configDirty){
+    const updated=applyModelProfile(config,backendDetector);
+    if(updated!==config){config=validate(updated);localStorage.setItem('simpang-config',JSON.stringify(config));fillConfig();reset();}
+  }
+  $('backendStatus').textContent=backendOnline?`Backend lokal · ${h.weights} · ${h.model_device==='not-loaded'?'model siap dimuat':h.model_device}`:'Backend versi lama; jalankan ulang start.cmd';
+}catch{backendOnline=false;$('backendStatus').textContent='Backend tidak terhubung';}$('backendStatus').classList.toggle('offline',!backendOnline);lock();}
 async function refreshProfiles(){try{const result=await logger.json('/api/profiles'),select=$('cameraProfile'),previous=profileId;select.replaceChildren(new Option('Profil baru',''));for(const p of result.profiles)select.add(new Option(p.name,p.profile_id));select.value=previous??'';}catch(error){toast('Profil: '+error.message);}}
 $('refreshProfiles').onclick=refreshProfiles;
 $('cameraProfile').onchange=()=>{if(!$('cameraProfile').value){profileId=null;$('profileName').value='';delete config.cameraGeometry;$('geometryConfirmed').checked=false;lock();}};
 $('geometryConfirmed').onchange=()=>lock();
-$('loadProfile').onclick=async()=>{try{assertConfig();const id=$('cameraProfile').value;if(!id)throw Error('Pilih profil kamera tersimpan.');const p=await logger.json(`/api/profiles/${id}`);if(video.videoWidth&&Math.abs(p.source_width/p.source_height-video.videoWidth/video.videoHeight)>.01)throw Error('Rasio gambar profil berbeda. Pilih Profil baru dan tandai ROI untuk rekaman ini.');config=validate(p.config);config.cameraGeometry={width:p.source_width,height:p.source_height,profile_id:id};profileId=id;$('profileName').value=p.name;$('geometryConfirmed').checked=false;configDirty=false;fillConfig();reset();toast('Profil dimuat. Periksa dan konfirmasikan posisi ROI pada rekaman.');}catch(error){toast(error.message);}};
+$('loadProfile').onclick=async()=>{try{assertConfig();const id=$('cameraProfile').value;if(!id)throw Error('Pilih profil kamera tersimpan.');const p=await logger.json(`/api/profiles/${id}`);if(video.videoWidth&&Math.abs(p.source_width/p.source_height-video.videoWidth/video.videoHeight)>.01)throw Error('Rasio gambar profil berbeda. Pilih Profil baru dan tandai ROI untuk rekaman ini.');config=validate(applyModelProfile(p.config,backendDetector));config.cameraGeometry={width:p.source_width,height:p.source_height,profile_id:id};profileId=id;$('profileName').value=p.name;$('geometryConfirmed').checked=false;configDirty=false;fillConfig();reset();toast('Profil dimuat. Periksa dan konfirmasikan posisi ROI pada rekaman.');}catch(error){toast(error.message);}};
 $('saveProfile').onclick=async()=>{try{assertConfig();if(!video.videoWidth)throw Error('Pilih rekaman sebelum menyimpan profil.');if(!$('geometryConfirmed').checked)throw Error('Periksa dan konfirmasikan ROI terlebih dahulu.');if(!saveConfiguration())return;const name=$('profileName').value.trim();if(!name)throw Error('Isi nama profil kamera.');const p=await logger.json(profileId?`/api/profiles/${profileId}`:'/api/profiles',{method:profileId?'PUT':'POST',body:JSON.stringify({name,config,source_width:video.videoWidth,source_height:video.videoHeight})});profileId=p.profile_id;config.cameraGeometry.profile_id=profileId;await refreshProfiles();toast('Profil kamera tersimpan di backend lokal.');}catch(error){toast(error.message);}};
 for(const id of ['fixed','yellow','allred','seed','level','source','controllerMode','phaseJson','fuzzyJson','measurementJson'])$(id).addEventListener('input',()=>{if(!active()){configDirty=true;lock();}});
 $('source').value=source;fillConfig();reset();updateSource();refreshBackend();refreshProfiles();setInterval(refreshBackend,5000);requestAnimationFrame(loop);
